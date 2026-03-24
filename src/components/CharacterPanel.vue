@@ -106,9 +106,9 @@ const stateMeta = computed(() => {
 
 const genderLabel = computed(() => {
   const map: Record<string, string> = {
-    female: 'Female avatar',
-    male: 'Male avatar',
-    other: 'Custom avatar',
+    female: 'Female',
+    male: 'Male',
+    other: 'Custom',
   }
   return map[character.value?.gender || 'other']
 })

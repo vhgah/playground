@@ -1,4 +1,4 @@
-import { computed, reactive, watchEffect } from 'vue'
+import { computed, reactive, watch } from 'vue'
 
 export type Screen = 'loading' | 'login' | 'creator' | 'main'
 export type SceneId = 'office' | 'home' | 'beach' | 'cafe' | 'park'
@@ -103,7 +103,9 @@ export const selectedUser = computed(() => {
   return state.users[state.selectedId]
 })
 
-watchEffect(() => {
+watch(
+  () => state.selectedId,
+  () => {
   if (!state.selectedId || !state.users[state.selectedId]) {
     state.selectedId = visibleUsers.value[0]?.id ?? null
   }
@@ -112,4 +114,6 @@ watchEffect(() => {
   if (selected?.scene) {
     state.currentScene = selected.scene
   }
-})
+  },
+  { immediate: true },
+)

@@ -9,7 +9,7 @@
       class="scene-btn"
       :class="{ active: state.currentScene === scene.id }"
       type="button"
-      @click="state.currentScene = scene.id"
+      @click="changeScene(scene.id)"
     >
       <span>{{ scene.icon }}</span>
       <span>{{ scene.label }}</span>
@@ -69,7 +69,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { signOut } from 'firebase/auth'
-import { auth } from '../services/firebase'
+import { ref, update } from 'firebase/database'
+import { auth, db } from '../services/firebase'
 import CharacterAvatar from './CharacterAvatar.vue'
 import SettingsModal from './SettingsModal.vue'
 import { visibleUsers, state, type CharacterState, type SceneId } from '../stores/useAppStore'
@@ -108,6 +109,23 @@ function togglePrivacy() {
   const uid = state.user?.uid
   if (uid && state.users[uid]) {
     state.users[uid].public = !state.privacyMode
+  }
+}
+
+async function changeScene(sceneId: SceneId) {
+  state.currentScene = sceneId
+
+  const uid = state.user?.uid
+  if (!uid || !state.users[uid]) return
+
+  // Move my own character to selected scene immediately.
+  state.users[uid].scene = sceneId
+  state.selectedId = uid
+
+  try {
+    await update(ref(db, `users/${uid}`), { scene: sceneId })
+  } catch (error) {
+    console.warn('Unable to sync scene to Firebase', error)
   }
 }
 
