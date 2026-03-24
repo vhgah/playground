@@ -33,15 +33,16 @@ const avatarSvg = computed(() => {
   const st = c.state || 'idle'
   const dk = (h: string, a: number) => shiftHex(h, -a)
 
-  const hair = [
-    `<ellipse cx="50" cy="40" rx="23" ry="14" fill="${hc}"/>
+  const hair =
+    [
+      `<ellipse cx="50" cy="40" rx="23" ry="14" fill="${hc}"/>
      <rect x="27" y="40" width="8" height="14" rx="4" fill="${hc}"/>
      <rect x="65" y="40" width="8" height="14" rx="4" fill="${hc}"/>`,
-    `<ellipse cx="50" cy="39" rx="23" ry="14" fill="${hc}"/>
+      `<ellipse cx="50" cy="39" rx="23" ry="14" fill="${hc}"/>
      <rect x="26" y="41" width="9" height="36" rx="4" fill="${hc}"/>
      <rect x="65" y="41" width="9" height="36" rx="4" fill="${hc}"/>
      <ellipse cx="50" cy="76" rx="22" ry="6" fill="${hc}"/>`,
-    `<ellipse cx="50" cy="38" rx="23" ry="15" fill="${hc}"/>
+      `<ellipse cx="50" cy="38" rx="23" ry="15" fill="${hc}"/>
      <circle cx="30" cy="40" r="7" fill="${hc}"/>
      <circle cx="70" cy="40" r="7" fill="${hc}"/>
      <circle cx="38" cy="30" r="7" fill="${hc}"/>
@@ -49,11 +50,11 @@ const avatarSvg = computed(() => {
      <circle cx="50" cy="27" r="7" fill="${hc}"/>
      <rect x="27" y="42" width="8" height="12" rx="4" fill="${hc}"/>
      <rect x="65" y="42" width="8" height="12" rx="4" fill="${hc}"/>`,
-    `<ellipse cx="50" cy="40" rx="23" ry="14" fill="${hc}"/>
+      `<ellipse cx="50" cy="40" rx="23" ry="14" fill="${hc}"/>
      <circle cx="50" cy="26" r="10" fill="${hc}"/>
      <rect x="27" y="40" width="8" height="12" rx="4" fill="${hc}"/>
      <rect x="65" y="40" width="8" height="12" rx="4" fill="${hc}"/>`,
-  ][hs] || ''
+    ][hs] || ''
 
   let eyes = `
     <circle cx="40" cy="62" r="3" fill="#333"/>
@@ -62,28 +63,29 @@ const avatarSvg = computed(() => {
     <circle cx="61" cy="61" r="1" fill="#fff"/>`
   let mouth = `<path d="M43,73 Q50,78 57,73" stroke="#c0392b" fill="none" stroke-width="1.5" stroke-linecap="round"/>`
 
-  const tops = [
-    `<rect x="26" y="92" width="48" height="44" rx="6" fill="${tc}"/>
+  const tops =
+    [
+      `<rect x="26" y="92" width="48" height="44" rx="6" fill="${tc}"/>
      <rect x="10" y="90" width="20" height="20" rx="7" fill="${tc}"/>
      <rect x="70" y="90" width="20" height="20" rx="7" fill="${tc}"/>`,
-    `<rect x="26" y="92" width="48" height="44" rx="6" fill="${tc}"/>
+      `<rect x="26" y="92" width="48" height="44" rx="6" fill="${tc}"/>
      <rect x="10" y="90" width="20" height="20" rx="7" fill="${tc}"/>
      <rect x="70" y="90" width="20" height="20" rx="7" fill="${tc}"/>
      <polygon points="50,92 43,106 50,109 57,106" fill="${dk(tc, 15)}"/>
      <circle cx="50" cy="102" r="1.5" fill="${dk(tc, 30)}"/>
      <circle cx="50" cy="109" r="1.5" fill="${dk(tc, 30)}"/>
      <circle cx="50" cy="116" r="1.5" fill="${dk(tc, 30)}"/>`,
-    `<rect x="24" y="91" width="52" height="46" rx="7" fill="${dk(tc, 12)}"/>
+      `<rect x="24" y="91" width="52" height="46" rx="7" fill="${dk(tc, 12)}"/>
      <rect x="8" y="89" width="22" height="22" rx="8" fill="${dk(tc, 12)}"/>
      <rect x="70" y="89" width="22" height="22" rx="8" fill="${dk(tc, 12)}"/>
      <polygon points="50,92 38,108 50,111" fill="${tc}"/>
      <polygon points="50,92 62,108 50,111" fill="${tc}"/>
      <rect x="38" y="92" width="24" height="40" rx="4" fill="${shiftHex(tc, 35)}"/>`,
-    `<path d="M26,92 Q50,87 74,92 L78,138 Q50,145 22,138 Z" fill="${tc}"/>
+      `<path d="M26,92 Q50,87 74,92 L78,138 Q50,145 22,138 Z" fill="${tc}"/>
      <rect x="9" y="89" width="20" height="20" rx="7" fill="${tc}"/>
      <rect x="71" y="89" width="20" height="20" rx="7" fill="${tc}"/>
      <ellipse cx="50" cy="92" rx="13" ry="6" fill="${sk}"/>`,
-  ][ts] || ''
+    ][ts] || ''
 
   const bottom =
     ts === 3
@@ -112,13 +114,16 @@ const avatarSvg = computed(() => {
       break
     case 'music':
       eyes = `<path d="M37,63 Q40,59 43,63" stroke="#333" fill="none" stroke-width="2"/>
-              <path d="M57,63 Q60,59 63,63" stroke="#333" fill="none" stroke-width="2"/>`
+               <path d="M57,63 Q60,59 63,63" stroke="#333" fill="none" stroke-width="2"/>`
       mouth = `<path d="M43,73 Q50,79 57,73" stroke="#c0392b" fill="none" stroke-width="2" stroke-linecap="round"/>`
       acc = `<path d="M20,57 Q50,14 80,57" stroke="${hc}" fill="none" stroke-width="6" stroke-linecap="round"/>
-             <ellipse cx="18" cy="58" rx="9" ry="11" fill="#374151"/>
-             <ellipse cx="82" cy="58" rx="9" ry="11" fill="#374151"/>
-             <ellipse cx="18" cy="58" rx="5" ry="7" fill="#4a5568"/>
-             <ellipse cx="82" cy="58" rx="5" ry="7" fill="#4a5568"/>`
+               <ellipse cx="18" cy="58" rx="9" ry="11" fill="#374151"/>
+               <ellipse cx="82" cy="58" rx="9" ry="11" fill="#374151"/>
+               <ellipse cx="18" cy="58" rx="5" ry="7"  fill="#4a5568"/>
+               <ellipse cx="82" cy="58" rx="5" ry="7"  fill="#4a5568"/>
+               <text x="76" y="48" font-size="13" fill="#f59e0b">♪</text>
+               <text x="83" y="35" font-size="10" fill="#818cf8">♫</text>
+               <text x="70" y="32" font-size="9"  fill="#ec4899">♩</text>`
       break
     case 'reading':
       eyes = `<path d="M37,63 Q40,60 43,63" stroke="#333" fill="none" stroke-width="2"/>

@@ -340,6 +340,45 @@ body {
   flex-direction: row;
 }
 
+.main-layout {
+  display: contents;
+}
+
+.mobile-menu-trigger {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: 35;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.92);
+  color: var(--text);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+  cursor: pointer;
+}
+
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.56);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  z-index: 24;
+}
+
+.sidebar-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
 .sidebar {
   width: 220px;
   background: var(--surface);
@@ -351,6 +390,11 @@ body {
   overflow-y: auto;
   flex-shrink: 0;
 }
+.sidebar-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 .sidebar-logo {
   font-size: 1.3rem;
   font-weight: 800;
@@ -359,6 +403,10 @@ body {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   padding: 0.5rem 0.25rem 0.75rem;
+}
+.sidebar-close {
+  display: none;
+  flex-shrink: 0;
 }
 .sec-title {
   font-size: 0.68rem;
@@ -1011,6 +1059,73 @@ body {
 }
 .toggle input:checked + .toggle-track::before {
   transform: translateX(20px);
+}
+
+@media (max-width: 768px) {
+  body {
+    overflow: auto;
+  }
+
+  .mobile-menu-trigger {
+    display: inline-flex;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: min(280px, 82vw);
+    z-index: 30;
+    transform: translateX(-100%);
+    transition: transform 0.28s ease;
+    box-shadow: 18px 0 40px rgba(0, 0, 0, 0.35);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .sidebar-close {
+    display: inline-flex;
+    margin-top: 2px;
+  }
+
+  .scene-area {
+    min-width: 0;
+    width: 100%;
+    padding-top: 64px;
+  }
+
+  .scene-chars {
+    padding: 0 16px;
+    gap: 16px;
+    bottom: 22%;
+  }
+
+  .char-scene-svg {
+    width: 72px;
+    height: 116px;
+  }
+
+  .char-panel {
+    position: fixed;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: min(320px, 88vw);
+    z-index: 32;
+    box-shadow: -16px 0 36px rgba(0, 0, 0, 0.3);
+  }
+
+  .char-panel.hidden {
+    width: 0;
+    border-left: none;
+  }
+
+  .panel-head {
+    padding-top: 1.25rem;
+  }
 }
 
 /* ─── TOAST ─── */

@@ -1,6 +1,22 @@
 <template>
-  <aside class="sidebar">
-    <div class="sidebar-logo">CharWorld</div>
+  <div
+    class="sidebar-overlay"
+    :class="{ open: state.showMobileSidebar }"
+    @click="state.showMobileSidebar = false"
+  />
+
+  <aside class="sidebar" :class="{ open: state.showMobileSidebar }">
+    <div class="sidebar-topbar">
+      <div class="sidebar-logo">CharWorld</div>
+      <button
+        class="btn-icon sidebar-close"
+        type="button"
+        aria-label="Close menu"
+        @click="state.showMobileSidebar = false"
+      >
+        ✕
+      </button>
+    </div>
 
     <div class="sec-title">Scenes</div>
     <button
@@ -129,6 +145,7 @@ function togglePrivacy() {
 
 async function changeScene(sceneId: SceneId) {
   state.currentScene = sceneId
+  state.showMobileSidebar = false
 
   const uid = state.user?.uid
   if (!uid || !state.users[uid]) return
@@ -147,6 +164,7 @@ async function changeScene(sceneId: SceneId) {
 function selectCharacter(characterId: string) {
   state.selectedId = characterId
   state.showCharPanel = true
+  state.showMobileSidebar = false
 }
 
 async function logout() {

@@ -105,6 +105,7 @@ export const state = reactive<{
   currentScene: SceneId
   showSettings: boolean
   showCharPanel: boolean
+  showMobileSidebar: boolean
   privacyMode: boolean
   spotify: SpotifyState
 }>({
@@ -116,6 +117,7 @@ export const state = reactive<{
   currentScene: 'office',
   showSettings: false,
   showCharPanel: false,
+  showMobileSidebar: false,
   privacyMode: false,
   spotify: {
     connected: false,
