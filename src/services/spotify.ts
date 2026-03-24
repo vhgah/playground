@@ -245,15 +245,19 @@ export function hasSpotifySession(): boolean {
 }
 
 export async function getSpotifyCurrentOrRecentTrack(): Promise<SpotifyTrack | null> {
-  const currentRes = await spotifyApi('/me/player/currently-playing')
-  if (currentRes.status === 200) {
-    const payload = await currentRes.json()
-    const currentTrack = mapTrackFromItem(payload, !!payload?.is_playing)
-    if (currentTrack) return currentTrack
-  } else if (currentRes.status !== 204) {
-    throw new Error('Unable to fetch currently playing track')
+  // Try currently-playing first (Premium-only, returns 403 on Free accounts).
+  try {
+    const currentRes = await spotifyApi('/me/player/currently-playing')
+    if (currentRes.status === 200) {
+      const payload = await currentRes.json()
+      const currentTrack = mapTrackFromItem(payload, !!payload?.is_playing)
+      if (currentTrack) return currentTrack
+    }
+  } catch {
+    // Silently fall through to recently-played.
   }
 
+  // Fallback: recently-played works for all account tiers.
   const recentRes = await spotifyApi('/me/player/recently-played?limit=1')
   if (!recentRes.ok) {
     throw new Error('Unable to fetch recently played track')
