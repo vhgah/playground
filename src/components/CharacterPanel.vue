@@ -38,6 +38,17 @@
           </div>
         </div>
 
+        <div v-if="isMine && state.spotify.connected" class="panel-sec">
+          <div class="panel-sec-title">Now Listening</div>
+          <div class="other-view" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
+            <div v-if="state.spotify.track" class="state-label">
+              {{ state.spotify.track.isPlaying ? '🎵' : '⏯' }} {{ state.spotify.track.name }}
+            </div>
+            <div v-if="state.spotify.track" class="state-sub">{{ state.spotify.track.artists.join(', ') }}</div>
+            <div v-else class="state-sub">No song found. Open settings to refresh Spotify.</div>
+          </div>
+        </div>
+
         <!-- <div class="panel-sec">
           <div class="panel-sec-title">Tasks</div>
 

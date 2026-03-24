@@ -40,6 +40,52 @@
           </label>
         </div>
 
+        <div class="settings-row settings-spotify">
+          <div>
+            <div class="settings-row-label">Spotify</div>
+            <div class="settings-row-desc">
+              <template v-if="!spotify.configured">Set `VITE_SPOTIFY_CLIENT_ID` to enable.</template>
+              <template v-else-if="spotify.track">
+                {{ spotify.track.isPlaying ? 'Now playing' : 'Recently played' }}:
+                <strong>{{ spotify.track.name }}</strong> - {{ spotify.track.artists.join(', ') }}
+              </template>
+              <template v-else>
+                {{ spotify.connected ? 'Connected. Press refresh to sync track.' : 'Connect to show your current song.' }}
+              </template>
+            </div>
+            <div v-if="spotify.error" class="settings-error">{{ spotify.error }}</div>
+          </div>
+
+          <div class="settings-actions">
+            <button
+              v-if="spotify.connected"
+              class="btn btn-secondary btn-sm"
+              type="button"
+              :disabled="spotify.loading"
+              @click="$emit('refresh-spotify')"
+            >
+              {{ spotify.loading ? 'Syncing...' : 'Refresh' }}
+            </button>
+            <button
+              v-if="spotify.connected"
+              class="btn btn-danger btn-sm"
+              type="button"
+              @click="$emit('disconnect-spotify')"
+            >
+              Disconnect
+            </button>
+            <button
+              v-else
+              class="btn btn-primary btn-sm"
+              type="button"
+              :disabled="!spotify.configured"
+              @click="$emit('connect-spotify')"
+            >
+              Connect
+            </button>
+          </div>
+        </div>
+
         <button class="btn btn-danger" type="button" @click="$emit('logout')">Sign out</button>
       </div>
     </div>
@@ -48,17 +94,22 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import type { SpotifyState } from '../stores/useAppStore'
 
 const props = defineProps<{
   open: boolean
   user: { displayName?: string | null; photoURL?: string | null; email?: string | null } | null
   privacyMode: boolean
+  spotify: SpotifyState
 }>()
 
 defineEmits<{
   close: []
   logout: []
   'toggle-privacy': []
+  'connect-spotify': []
+  'disconnect-spotify': []
+  'refresh-spotify': []
 }>()
 
 const initials = computed(() => {

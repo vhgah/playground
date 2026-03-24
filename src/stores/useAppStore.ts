@@ -34,6 +34,21 @@ export interface CharacterRecord {
   tasks: TaskItem[]
 }
 
+export interface SpotifyState {
+  connected: boolean
+  loading: boolean
+  configured: boolean
+  error: string | null
+  track: {
+    name: string
+    artists: string[]
+    albumName: string
+    albumImageUrl?: string
+    songUrl?: string
+    isPlaying: boolean
+  } | null
+}
+
 const demoUsers: Record<string, CharacterRecord> = {
   'demo-alice': {
     name: 'Alice',
@@ -72,6 +87,7 @@ export const state = reactive<{
   showSettings: boolean
   showCharPanel: boolean
   privacyMode: boolean
+  spotify: SpotifyState
 }>({
   user: null,
   users: { ...demoUsers },
@@ -82,6 +98,13 @@ export const state = reactive<{
   showSettings: false,
   showCharPanel: true,
   privacyMode: false,
+  spotify: {
+    connected: false,
+    loading: false,
+    configured: false,
+    error: null,
+    track: null,
+  },
 })
 
 export const visibleUsers = computed(() => {

@@ -40,3 +40,15 @@ npm run dev
 ```sh
 npm run build
 ```
+
+## Spotify integration setup
+
+Create a `.env` file in project root:
+
+```sh
+VITE_SPOTIFY_CLIENT_ID=your_spotify_app_client_id
+# optional, defaults to current page URL
+VITE_SPOTIFY_REDIRECT_URI=http://localhost:5173/
+```
+
+Then in Spotify Dashboard, add the same redirect URI to your app settings.

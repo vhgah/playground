@@ -59,15 +59,19 @@
       :open="state.showSettings"
       :user="state.user"
       :privacy-mode="state.privacyMode"
+      :spotify="state.spotify"
       @close="state.showSettings = false"
       @logout="logout"
       @toggle-privacy="togglePrivacy"
+      @connect-spotify="connectSpotify"
+      @disconnect-spotify="disconnectSpotify"
+      @refresh-spotify="refreshSpotifyTrack"
     />
   </aside>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onBeforeUnmount, onMounted, watch } from 'vue'
 import { signOut } from 'firebase/auth'
 import { ref, update } from 'firebase/database'
 import { auth, db } from '../services/firebase'
@@ -75,6 +79,7 @@ import CharacterAvatar from './CharacterAvatar.vue'
 import SettingsModal from './SettingsModal.vue'
 import { visibleUsers, state, type CharacterState, type SceneId } from '../stores/useAppStore'
 import { CHARACTER_STATE_META } from '../constants/states'
+import { beginSpotifyAuth, clearSpotifySession, getSpotifyCurrentOrRecentTrack } from '../services/spotify'
 
 const sceneOptions: Array<{ id: SceneId; label: string; icon: string }> = [
   { id: 'office', label: 'Office', icon: '🏢' },
@@ -96,6 +101,22 @@ const initials = computed(() => {
     .slice(0, 2)
     .toUpperCase()
 })
+
+let spotifyPollTimer: number | null = null
+
+function clearSpotifyPolling() {
+  if (!spotifyPollTimer) return
+  window.clearInterval(spotifyPollTimer)
+  spotifyPollTimer = null
+}
+
+function startSpotifyPolling() {
+  clearSpotifyPolling()
+  if (!state.spotify.connected) return
+  spotifyPollTimer = window.setInterval(() => {
+    void refreshSpotifyTrack()
+  }, 30_000)
+}
 
 function togglePrivacy() {
   state.privacyMode = !state.privacyMode
@@ -139,4 +160,67 @@ async function logout() {
     state.screen = 'login'
   }
 }
+
+async function connectSpotify() {
+  state.spotify.error = null
+  try {
+    await beginSpotifyAuth()
+  } catch (error) {
+    state.spotify.error = error instanceof Error ? error.message : 'Unable to connect Spotify'
+  }
+}
+
+function disconnectSpotify() {
+  clearSpotifySession()
+  state.spotify.connected = false
+  state.spotify.track = null
+  state.spotify.error = null
+  clearSpotifyPolling()
+}
+
+async function refreshSpotifyTrack() {
+  if (!state.spotify.connected || state.spotify.loading) return
+
+  state.spotify.loading = true
+  try {
+    const track = await getSpotifyCurrentOrRecentTrack()
+    state.spotify.track = track
+    state.spotify.error = null
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unable to load Spotify track'
+    state.spotify.error = message
+    if (message.includes('not connected')) {
+      state.spotify.connected = false
+      state.spotify.track = null
+      clearSpotifySession()
+      clearSpotifyPolling()
+    }
+  } finally {
+    state.spotify.loading = false
+  }
+}
+
+onMounted(() => {
+  if (state.spotify.connected) {
+    void refreshSpotifyTrack()
+    startSpotifyPolling()
+  }
+})
+
+onBeforeUnmount(() => {
+  clearSpotifyPolling()
+})
+
+watch(
+  () => state.spotify.connected,
+  (connected) => {
+    if (connected) {
+      void refreshSpotifyTrack()
+      startSpotifyPolling()
+      return
+    }
+    clearSpotifyPolling()
+  },
+  { immediate: true },
+)
 </script>

@@ -921,6 +921,23 @@ body {
   margin-top: 2px;
 }
 
+.settings-spotify {
+  align-items: flex-start;
+}
+
+.settings-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 92px;
+}
+
+.settings-error {
+  font-size: 0.72rem;
+  color: #fca5a5;
+  margin-top: 5px;
+}
+
 /* Toggle switch */
 .toggle {
   position: relative;

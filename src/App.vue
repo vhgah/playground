@@ -22,6 +22,7 @@ import { auth } from './services/firebase'
 import { getAdditionalUserInfo, getRedirectResult, onAuthStateChanged, type UserCredential } from 'firebase/auth'
 import { loadUserProfile, normalizeGoogleGender } from './services/userProfile'
 import { state } from './stores/useAppStore'
+import { handleSpotifyCallbackIfPresent, hasSpotifySession, isSpotifyConfigured } from './services/spotify'
 
 import Login from './components/Login.vue'
 import Creator from './components/Creator.vue'
@@ -40,6 +41,20 @@ function extractGoogleGender(credential: unknown): 'female' | 'male' | 'other' |
 
 onMounted(() => {
   void (async () => {
+    state.spotify.configured = isSpotifyConfigured()
+    state.spotify.connected = hasSpotifySession()
+
+    try {
+      const resolvedSpotifyAuth = await handleSpotifyCallbackIfPresent()
+      if (resolvedSpotifyAuth) {
+        state.spotify.connected = true
+        state.spotify.error = null
+      }
+    } catch (error) {
+      state.spotify.connected = false
+      state.spotify.error = error instanceof Error ? error.message : 'Spotify authorization failed'
+    }
+
     const cachedGender = sessionStorage.getItem(GENDER_CACHE_KEY)
     if (cachedGender) {
       pendingGender = normalizeGoogleGender(cachedGender)
