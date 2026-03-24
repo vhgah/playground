@@ -24,7 +24,7 @@
               class="state-btn"
               :class="{ active: character.state === option.id }"
               type="button"
-              @click="character.state = option.id"
+              @click="changeState(option.id)"
             >
               <span class="state-icon">{{ option.icon }}</span>
               {{ option.label }}
@@ -91,6 +91,8 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import { ref as dbRef, update } from 'firebase/database'
+import { db } from '../services/firebase'
 import CharacterAvatar from './CharacterAvatar.vue'
 import { selectedUser, state, type CharacterState } from '../stores/useAppStore'
 import { CHARACTER_STATES } from '../constants/states'
@@ -130,6 +132,19 @@ const sceneLabel = computed(() => {
   }
   return map[character.value?.scene || 'office']
 })
+
+async function changeState(newState: CharacterState) {
+  if (!character.value) return
+  character.value.state = newState
+
+  const uid = state.user?.uid
+  if (!uid) return
+  try {
+    await update(dbRef(db, `users/${uid}`), { state: newState })
+  } catch (e) {
+    console.warn('Unable to sync state to Firebase', e)
+  }
+}
 
 function addTask() {
   if (!character.value || !newTask.value.trim()) return
