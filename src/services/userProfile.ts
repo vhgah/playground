@@ -125,6 +125,52 @@ export function mergeRtdbProfile(
   }
 }
 
+export function recordFromRtdb(raw: Record<string, unknown>): CharacterRecord | null {
+  if (!isOnboardedProfile(raw)) return null
+
+  const tasks: CharacterRecord['tasks'] = Array.isArray(raw.tasks)
+    ? raw.tasks.filter(
+        (t): t is { id: number; text: string; done: boolean } =>
+          t &&
+          typeof t === 'object' &&
+          typeof (t as { id?: unknown }).id === 'number' &&
+          typeof (t as { text?: unknown }).text === 'string' &&
+          typeof (t as { done?: unknown }).done === 'boolean',
+      )
+    : []
+
+  let spotify: CharacterRecord['spotify'] = null
+  if (raw.spotify && typeof raw.spotify === 'object') {
+    const s = raw.spotify as Record<string, unknown>
+    if (typeof s.name === 'string' && Array.isArray(s.artists)) {
+      spotify = {
+        name: s.name,
+        artists: s.artists.filter((a): a is string => typeof a === 'string'),
+        albumName: typeof s.albumName === 'string' ? s.albumName : 'Unknown album',
+        albumImageUrl: typeof s.albumImageUrl === 'string' ? s.albumImageUrl : undefined,
+        songUrl: typeof s.songUrl === 'string' ? s.songUrl : undefined,
+        isPlaying: Boolean(s.isPlaying),
+        updatedAt: typeof s.updatedAt === 'number' ? s.updatedAt : undefined,
+      }
+    }
+  }
+
+  return {
+    name: typeof raw.name === 'string' ? raw.name : 'Unknown',
+    gender: asGender(raw.gender),
+    state: asCharacterState(raw.state, 'idle'),
+    public: typeof raw.public === 'boolean' ? raw.public : true,
+    scene: asSceneId(raw.scene, 'office'),
+    skinTone: typeof raw.skinTone === 'string' ? raw.skinTone : '#f1c27d',
+    hairColor: typeof raw.hairColor === 'string' ? raw.hairColor : '#1f2937',
+    outfitColor: typeof raw.outfitColor === 'string' ? raw.outfitColor : '#6366f1',
+    photoURL: typeof raw.photoURL === 'string' ? raw.photoURL : null,
+    email: typeof raw.email === 'string' ? raw.email : null,
+    tasks,
+    spotify,
+  }
+}
+
 export type ProfileRoute = { screen: 'main' | 'creator'; record: CharacterRecord }
 
 /**
