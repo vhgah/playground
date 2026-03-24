@@ -62,6 +62,7 @@ export function defaultCharacterFromAuth(
     photoURL: user.photoURL,
     email: user.email,
     tasks: [],
+    spotify: null,
   }
 }
 
@@ -97,6 +98,30 @@ export function mergeRtdbProfile(
     photoURL: v.photoURL === null || typeof v.photoURL === 'string' ? v.photoURL : user.photoURL ?? base.photoURL,
     email: v.email === null || typeof v.email === 'string' ? v.email : user.email ?? base.email,
     tasks,
+    spotify:
+      v.spotify &&
+      typeof v.spotify === 'object' &&
+      typeof (v.spotify as { name?: unknown }).name === 'string' &&
+      Array.isArray((v.spotify as { artists?: unknown }).artists)
+        ? {
+            name: (v.spotify as { name: string }).name,
+            artists: (v.spotify as { artists: string[] }).artists,
+            albumName: String((v.spotify as { albumName?: unknown }).albumName || 'Unknown album'),
+            albumImageUrl:
+              typeof (v.spotify as { albumImageUrl?: unknown }).albumImageUrl === 'string'
+                ? (v.spotify as { albumImageUrl: string }).albumImageUrl
+                : undefined,
+            songUrl:
+              typeof (v.spotify as { songUrl?: unknown }).songUrl === 'string'
+                ? (v.spotify as { songUrl: string }).songUrl
+                : undefined,
+            isPlaying: Boolean((v.spotify as { isPlaying?: unknown }).isPlaying),
+            updatedAt:
+              typeof (v.spotify as { updatedAt?: unknown }).updatedAt === 'number'
+                ? (v.spotify as { updatedAt: number }).updatedAt
+                : undefined,
+          }
+        : null,
   }
 }
 

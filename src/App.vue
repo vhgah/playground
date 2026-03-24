@@ -18,7 +18,8 @@
 
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
-import { auth } from './services/firebase'
+import { ref, onValue } from 'firebase/database'
+import { auth, db } from './services/firebase'
 import { getAdditionalUserInfo, getRedirectResult, onAuthStateChanged, type UserCredential } from 'firebase/auth'
 import { loadUserProfile, normalizeGoogleGender } from './services/userProfile'
 import { state } from './stores/useAppStore'
@@ -31,6 +32,7 @@ import MainLayout from './components/MainLayout.vue'
 const screen = computed(() => state.screen)
 const GENDER_CACHE_KEY = 'cw:pending-google-gender'
 let pendingGender: 'female' | 'male' | 'other' = 'other'
+let stopUsersRealtimeSync: (() => void) | null = null
 
 function extractGoogleGender(credential: unknown): 'female' | 'male' | 'other' | null {
   if (!credential) return null
@@ -71,6 +73,10 @@ onMounted(() => {
 
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
+        if (stopUsersRealtimeSync) {
+          stopUsersRealtimeSync()
+          stopUsersRealtimeSync = null
+        }
         state.user = null
         state.screen = 'login'
         return
@@ -101,11 +107,47 @@ onMounted(() => {
           photoURL: user.photoURL,
           email: user.email,
           tasks: [],
+          spotify: null,
         }
         state.step = 0
         state.screen = 'creator'
         state.selectedId = user.uid
         pendingGender = 'other'
+      }
+
+      if (!stopUsersRealtimeSync) {
+        const usersRef = ref(db, 'users')
+        stopUsersRealtimeSync = onValue(usersRef, (snapshot) => {
+          const value = snapshot.val() as Record<string, Record<string, unknown>> | null
+          if (!value) return
+
+          Object.entries(value).forEach(([uid, raw]) => {
+            const existing = state.users[uid]
+            if (!existing) return
+
+            if (typeof raw.name === 'string') existing.name = raw.name
+            if (typeof raw.state === 'string') existing.state = raw.state as typeof existing.state
+            if (typeof raw.scene === 'string') existing.scene = raw.scene as typeof existing.scene
+            if (typeof raw.public === 'boolean') existing.public = raw.public
+
+            if (raw.spotify && typeof raw.spotify === 'object') {
+              const spotify = raw.spotify as Record<string, unknown>
+              if (typeof spotify.name === 'string' && Array.isArray(spotify.artists)) {
+                existing.spotify = {
+                  name: spotify.name,
+                  artists: spotify.artists.filter((a): a is string => typeof a === 'string'),
+                  albumName: typeof spotify.albumName === 'string' ? spotify.albumName : 'Unknown album',
+                  albumImageUrl: typeof spotify.albumImageUrl === 'string' ? spotify.albumImageUrl : undefined,
+                  songUrl: typeof spotify.songUrl === 'string' ? spotify.songUrl : undefined,
+                  isPlaying: Boolean(spotify.isPlaying),
+                  updatedAt: typeof spotify.updatedAt === 'number' ? spotify.updatedAt : undefined,
+                }
+              } else {
+                existing.spotify = null
+              }
+            }
+          })
+        })
       }
     })
   })()

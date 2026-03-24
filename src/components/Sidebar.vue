@@ -176,6 +176,12 @@ function disconnectSpotify() {
   state.spotify.track = null
   state.spotify.error = null
   clearSpotifyPolling()
+
+  const uid = state.user?.uid
+  if (uid && state.users[uid]) {
+    state.users[uid].spotify = null
+    void update(ref(db, `users/${uid}`), { spotify: null })
+  }
 }
 
 async function refreshSpotifyTrack() {
@@ -186,6 +192,22 @@ async function refreshSpotifyTrack() {
     const track = await getSpotifyCurrentOrRecentTrack()
     state.spotify.track = track
     state.spotify.error = null
+
+    const uid = state.user?.uid
+    if (uid && state.users[uid]) {
+      state.users[uid].spotify = track
+        ? {
+            name: track.name,
+            artists: track.artists,
+            albumName: track.albumName,
+            albumImageUrl: track.albumImageUrl,
+            songUrl: track.songUrl,
+            isPlaying: track.isPlaying,
+            updatedAt: Date.now(),
+          }
+        : null
+      await update(ref(db, `users/${uid}`), { spotify: state.users[uid].spotify ?? null })
+    }
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unable to load Spotify track'
     state.spotify.error = message

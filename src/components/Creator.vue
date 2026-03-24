@@ -206,6 +206,7 @@ const char = reactive<CharacterRecord>({
   photoURL: null,
   email: null,
   tasks: [],
+  spotify: null,
 })
 
 /** Creator mounts before login; profile is created in App.vue. Sync when entering creator. */
@@ -226,6 +227,7 @@ watch(
     char.photoURL = u.photoURL ?? state.user?.photoURL ?? null
     char.email = u.email ?? state.user?.email ?? null
     char.tasks = u.tasks?.length ? [...u.tasks] : []
+    char.spotify = u.spotify ?? null
   },
   { immediate: true },
 )

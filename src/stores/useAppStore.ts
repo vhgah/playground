@@ -32,6 +32,15 @@ export interface CharacterRecord {
   photoURL?: string | null
   email?: string | null
   tasks: TaskItem[]
+  spotify?: {
+    name: string
+    artists: string[]
+    albumName: string
+    albumImageUrl?: string
+    songUrl?: string
+    isPlaying: boolean
+    updatedAt?: number
+  } | null
 }
 
 export interface SpotifyState {
@@ -63,6 +72,7 @@ const demoUsers: Record<string, CharacterRecord> = {
       { id: 1, text: 'Review pull request', done: true },
       { id: 2, text: 'Ship avatar scene', done: false },
     ],
+    spotify: null,
   },
   'demo-lucas': {
     name: 'Lucas',
@@ -74,6 +84,7 @@ const demoUsers: Record<string, CharacterRecord> = {
     hairColor: '#1f2937',
     outfitColor: '#f59e0b',
     tasks: [{ id: 1, text: 'Sync with product team', done: false }],
+    spotify: null,
   },
 }
 
@@ -96,7 +107,7 @@ export const state = reactive<{
   selectedId: 'demo-alice',
   currentScene: 'office',
   showSettings: false,
-  showCharPanel: true,
+  showCharPanel: false,
   privacyMode: false,
   spotify: {
     connected: false,
