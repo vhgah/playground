@@ -5,10 +5,13 @@ export type SceneId = 'office' | 'home' | 'beach' | 'cafe' | 'park'
 export type CharacterState =
   | 'idle'
   | 'coding'
+  | 'music'
+  | 'reading'
+  | 'sleeping'
+  | 'eating'
+  | 'gaming'
+  | 'workout'
   | 'meeting'
-  | 'focus'
-  | 'break'
-  | 'offline'
 
 export interface TaskItem {
   id: number
@@ -49,7 +52,7 @@ const demoUsers: Record<string, CharacterRecord> = {
   'demo-lucas': {
     name: 'Lucas',
     gender: 'male',
-    state: 'meeting',
+    state: 'music',
     public: true,
     scene: 'office',
     skinTone: '#c68642',
@@ -60,7 +63,7 @@ const demoUsers: Record<string, CharacterRecord> = {
   'demo-minh': {
     name: 'Minh',
     gender: 'other',
-    state: 'break',
+    state: 'gaming',
     public: true,
     scene: 'cafe',
     skinTone: '#e0ac69',

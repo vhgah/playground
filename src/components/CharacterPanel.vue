@@ -7,7 +7,7 @@
         <div class="panel-info">
           <div class="panel-name">{{ character.name }}</div>
           <div class="panel-gender">{{ genderLabel }}</div>
-          <div class="panel-state-badge">{{ stateMeta.label }}</div>
+          <div class="panel-state-badge">{{ stateMeta.icon }} {{ stateMeta.label }}</div>
         </div>
       </div>
 
@@ -31,7 +31,7 @@
 
           <div v-else class="other-view">
             <div class="big-state">{{ stateMeta.icon }}</div>
-            <div class="state-label">{{ stateMeta.label }}</div>
+            <div class="state-label">{{ stateMeta.icon }} {{ stateMeta.label }}</div>
             <div class="state-sub">Currently hanging out in the {{ sceneLabel }}.</div>
           </div>
         </div>
@@ -80,19 +80,13 @@
 import { computed, ref } from 'vue'
 import CharacterAvatar from './CharacterAvatar.vue'
 import { selectedUser, state, type CharacterState } from '../stores/useAppStore'
+import { CHARACTER_STATES } from '../constants/states'
 
 const newTask = ref('')
 
-const states: Array<{ id: CharacterState; label: string; icon: string }> = [
-  { id: 'idle', label: 'Idle', icon: '○' },
-  { id: 'coding', label: 'Coding', icon: '</>' },
-  { id: 'meeting', label: 'Meeting', icon: '△' },
-  { id: 'focus', label: 'Focus', icon: '◎' },
-  { id: 'break', label: 'Break', icon: '☕' },
-  { id: 'offline', label: 'Offline', icon: '−' },
-]
+const states: Array<{ id: CharacterState; label: string; icon: string }> = CHARACTER_STATES
 
-const fallbackState = { id: 'idle' as CharacterState, label: 'Idle', icon: '○' }
+const fallbackState = { id: 'idle' as CharacterState, label: 'Relaxing', icon: '😊' }
 
 const character = selectedUser
 

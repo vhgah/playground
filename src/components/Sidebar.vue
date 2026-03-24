@@ -34,7 +34,7 @@
           {{ character.name }}
           <span v-if="character.id === state.user?.uid" class="me-badge">ME</span>
         </div>
-        <div class="char-side-state">{{ stateLabels[character.state] }}</div>
+        <div class="char-side-state">{{ stateMeta[character.state].icon }} {{ stateMeta[character.state].label }}</div>
       </div>
     </button>
 
@@ -74,6 +74,7 @@ import { auth, db } from '../services/firebase'
 import CharacterAvatar from './CharacterAvatar.vue'
 import SettingsModal from './SettingsModal.vue'
 import { visibleUsers, state, type CharacterState, type SceneId } from '../stores/useAppStore'
+import { CHARACTER_STATE_META } from '../constants/states'
 
 const sceneOptions: Array<{ id: SceneId; label: string; icon: string }> = [
   { id: 'office', label: 'Office', icon: '🏢' },
@@ -83,14 +84,7 @@ const sceneOptions: Array<{ id: SceneId; label: string; icon: string }> = [
   { id: 'park', label: 'Park', icon: '🌿' },
 ]
 
-const stateLabels: Record<CharacterState, string> = {
-  idle: 'Idle',
-  coding: 'Coding',
-  meeting: 'In meeting',
-  focus: 'Deep focus',
-  break: 'On break',
-  offline: 'Offline',
-}
+const stateMeta: Record<CharacterState, { label: string; icon: string }> = CHARACTER_STATE_META
 
 const characters = visibleUsers
 

@@ -72,22 +72,54 @@ const avatarSvg = computed(() => {
            <rect x="33" y="130" width="30" height="2" rx="1" fill="#94a3b8"/>
            <rect x="33" y="136" width="26" height="2" rx="1" fill="#94a3b8"/>
            <rect x="33" y="142" width="30" height="2" rx="1" fill="#94a3b8"/>`
-  } else if (c.state === 'focus') {
-    eyes = `<path d="M37,61 Q40,57 43,61" stroke="#333" fill="none" stroke-width="2"/>
-            <path d="M57,61 Q60,57 63,61" stroke="#333" fill="none" stroke-width="2"/>`
-    mouth = `<path d="M45,74 Q50,72 55,74" stroke="#c0392b" fill="none" stroke-width="1.5" stroke-linecap="round"/>`
-    acc = `<circle cx="76" cy="48" r="5" fill="#93c5fd" opacity=".8"/>`
-  } else if (c.state === 'break') {
+  } else if (c.state === 'music') {
     eyes = `<path d="M37,63 Q40,59 43,63" stroke="#333" fill="none" stroke-width="2"/>
-            <path d="M57,63 Q60,59 63,63" stroke="#333" fill="none" stroke-width="2"/>`
-    acc = `<rect x="66" y="120" width="12" height="16" rx="2" fill="#d97706"/>
-           <rect x="68" y="117" width="8" height="3" rx="1.5" fill="#f59e0b"/>
-           <path d="M78 124c3 0 3 7 0 7" stroke="#fbbf24" stroke-width="1.5" fill="none"/>`
-  } else if (c.state === 'offline') {
+               <path d="M57,63 Q60,59 63,63" stroke="#333" fill="none" stroke-width="2"/>`
+    mouth = `<path d="M43,73 Q50,79 57,73" stroke="#c0392b" fill="none" stroke-width="2" stroke-linecap="round"/>`
+    acc = `<path d="M20,57 Q50,14 80,57" stroke="${hc}" fill="none" stroke-width="6" stroke-linecap="round"/>
+               <ellipse cx="18" cy="58" rx="9" ry="11" fill="#374151"/>
+               <ellipse cx="82" cy="58" rx="9" ry="11" fill="#374151"/>
+               <ellipse cx="18" cy="58" rx="5" ry="7"  fill="#4a5568"/>
+               <ellipse cx="82" cy="58" rx="5" ry="7"  fill="#4a5568"/>
+               <text x="76" y="48" font-size="13" fill="#f59e0b">♪</text>
+               <text x="83" y="35" font-size="10" fill="#818cf8">♫</text>
+               <text x="70" y="32" font-size="9"  fill="#ec4899">♩</text>`
+  } else if (c.state === 'reading') {
+    eyes = `<path d="M37,63 Q40,60 43,63" stroke="#333" fill="none" stroke-width="2"/>
+            <path d="M57,63 Q60,60 63,63" stroke="#333" fill="none" stroke-width="2"/>`
+    acc = `<rect x="20" y="128" width="60" height="42" rx="4" fill="#8B4513"/>
+           <line x1="50" y1="128" x2="50" y2="170" stroke="#6B3410" stroke-width="2"/>
+           <rect x="22" y="130" width="26" height="38" rx="2" fill="#fef9f0"/>
+           <rect x="52" y="130" width="26" height="38" rx="2" fill="#fef9f0"/>`
+  } else if (c.state === 'sleeping') {
     eyes = `<path d="M37,62 Q40,58 43,62" stroke="#333" fill="none" stroke-width="2"/>
             <path d="M57,62 Q60,58 63,62" stroke="#333" fill="none" stroke-width="2"/>`
     mouth = `<path d="M45,74 Q50,71 55,74" stroke="#c0392b" fill="none" stroke-width="1.5" stroke-linecap="round"/>`
-    acc = `<text x="70" y="36" font-size="14" fill="#94a3b8" font-weight="bold" opacity=".75">z</text>`
+    acc = `<text x="64" y="46" font-size="10" fill="#94a3b8" font-weight="bold">z</text>
+           <text x="70" y="36" font-size="14" fill="#94a3b8" font-weight="bold" opacity=".75">z</text>`
+  } else if (c.state === 'eating') {
+    mouth = `<ellipse cx="50" cy="74" rx="5" ry="4" fill="#c0392b"/>`
+    acc = `<ellipse cx="50" cy="152" rx="24" ry="12" fill="#e2e8f0"/>
+           <ellipse cx="50" cy="148" rx="24" ry="10" fill="#f97316"/>
+           <path d="M26,148 Q50,138 74,148" fill="#fed7aa"/>`
+  } else if (c.state === 'gaming') {
+    acc = `<rect x="24" y="138" width="52" height="28" rx="14" fill="#374151"/>
+           <circle cx="36" cy="150" r="7" fill="#4a5568"/>
+           <circle cx="62" cy="146" r="3.5" fill="#ef4444"/>
+           <circle cx="68" cy="152" r="3.5" fill="#3b82f6"/>
+           <circle cx="56" cy="152" r="3.5" fill="#10b981"/>`
+  } else if (c.state === 'workout') {
+    eyes = `<path d="M37,61 Q40,57 43,61" stroke="#333" fill="none" stroke-width="2"/>
+               <path d="M57,61 Q60,57 63,61" stroke="#333" fill="none" stroke-width="2"/>`
+    mouth = `<path d="M43,73 Q50,79 57,73" stroke="#c0392b" fill="none" stroke-width="2" stroke-linecap="round"/>`
+    arms = `<path d="M26,98 C16,90 12,80 16,134" stroke="${sk}" stroke-width="7" fill="none" stroke-linecap="round"/>
+            <path d="M74,98 C84,90 88,80 84,134" stroke="${sk}" stroke-width="7" fill="none" stroke-linecap="round"/>`
+    acc = `<rect x="8"  y="132" width="84" height="8" rx="4" fill="#4a5568"/>
+            <rect x="6"  y="126" width="14" height="20" rx="7" fill="#374151"/>
+            <rect x="9"  y="129" width="7"  height="14" rx="3" fill="#6b7280"/>
+            <rect x="80" y="126" width="14" height="20" rx="7" fill="#374151"/>
+            <rect x="84" y="129" width="7"  height="14" rx="3" fill="#6b7280"/>
+            <path d="M76,48 Q78,54 76,58 Q74,54 76,48" fill="#93c5fd" opacity=".8"/>`
   }
 
   const top = `<rect x="24" y="91" width="52" height="46" rx="7" fill="${dk(tc, 12)}"/>

@@ -4,14 +4,21 @@ import { db } from './firebase'
 import type { CharacterRecord, CharacterState, SceneId } from '../stores/useAppStore'
 
 const SCENES: SceneId[] = ['office', 'home', 'beach', 'cafe', 'park']
-const STATES: CharacterState[] = ['idle', 'coding', 'meeting', 'focus', 'break', 'offline']
+const STATES: CharacterState[] = ['idle', 'coding', 'music', 'reading', 'sleeping', 'eating', 'gaming', 'workout', 'meeting']
+const LEGACY_STATE_MAP: Record<string, CharacterState> = {
+  focus: 'reading',
+  break: 'eating',
+  offline: 'sleeping',
+}
 
 function asSceneId(v: unknown, fallback: SceneId): SceneId {
   return typeof v === 'string' && SCENES.includes(v as SceneId) ? (v as SceneId) : fallback
 }
 
 function asCharacterState(v: unknown, fallback: CharacterState): CharacterState {
-  return typeof v === 'string' && STATES.includes(v as CharacterState) ? (v as CharacterState) : fallback
+  if (typeof v !== 'string') return fallback
+  if (STATES.includes(v as CharacterState)) return v as CharacterState
+  return LEGACY_STATE_MAP[v] || fallback
 }
 
 function asGender(v: unknown): CharacterRecord['gender'] {
