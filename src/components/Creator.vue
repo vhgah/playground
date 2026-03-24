@@ -213,17 +213,17 @@ const genderOptions = [
 ] as const
 
 const hairStyleOptions = [
-  { label: 'Short', value: '0' },
-  { label: 'Long', value: '1' },
-  { label: 'Curly', value: '2' },
-  { label: 'Bun', value: '3' },
+  { label: '✂️ Short', value: '0' },
+  { label: '🌊 Long', value: '1' },
+  { label: '🌀 Curly', value: '2' },
+  { label: '🎀 Bun', value: '3' },
 ] as const
 
 const topStyleOptions = [
-  { label: 'T-shirt', value: '0' },
-  { label: 'Shirt', value: '1' },
-  { label: 'Jacket', value: '2' },
-  { label: 'Dress', value: '3' },
+  { label: '👕 T-shirt', value: '0' },
+  { label: '👔 Shirt', value: '1' },
+  { label: '🧥 Jacket', value: '2' },
+  { label: '👗 Dress', value: '3' },
 ] as const
 
 const sceneOptions: Array<{ label: string; value: SceneId }> = [
