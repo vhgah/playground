@@ -101,16 +101,18 @@ const avatarSvg = computed(() => {
 
   switch (st) {
     case 'coding':
+      eyes = `<circle cx="40" cy="62" r="3" fill="#333"/><circle cx="60" cy="62" r="3" fill="#333"/>
+               <circle cx="41" cy="61" r="1" fill="#fff"/><circle cx="61" cy="61" r="1" fill="#fff"/>`
       mouth = `<path d="M44,73 Q50,76 56,73" stroke="#c0392b" fill="none" stroke-width="1.5" stroke-linecap="round"/>`
       arms = `<path d="M26,98 C22,114 24,128 28,138" stroke="${sk}" stroke-width="7" fill="none" stroke-linecap="round"/>
-              <path d="M74,98 C78,114 76,128 72,138" stroke="${sk}" stroke-width="7" fill="none" stroke-linecap="round"/>`
+               <path d="M74,98 C78,114 76,128 72,138" stroke="${sk}" stroke-width="7" fill="none" stroke-linecap="round"/>`
       acc = `<rect x="16" y="132" width="68" height="38" rx="4" fill="#2d3748" stroke="#4a5568" stroke-width="1"/>
-             <rect x="18" y="134" width="64" height="26" rx="3" fill="#0f172a"/>
-             <rect x="20" y="137" width="22" height="2" rx="1" fill="#6366f1" opacity=".9"/>
-             <rect x="20" y="141" width="34" height="2" rx="1" fill="#10b981" opacity=".9"/>
-             <rect x="20" y="145" width="28" height="2" rx="1" fill="#6366f1" opacity=".5"/>
-             <rect x="20" y="149" width="40" height="2" rx="1" fill="#f59e0b" opacity=".8"/>
-             <rect x="16" y="170" width="68" height="6" rx="2" fill="#374151"/>`
+               <rect x="18" y="134" width="64" height="26" rx="3" fill="#0f172a"/>
+               <rect x="20" y="137" width="22" height="2" rx="1" fill="#6366f1" opacity=".9"/>
+               <rect x="20" y="141" width="34" height="2" rx="1" fill="#10b981" opacity=".9"/>
+               <rect x="20" y="145" width="28" height="2" rx="1" fill="#6366f1" opacity=".5"/>
+               <rect x="20" y="149" width="40" height="2" rx="1" fill="#f59e0b" opacity=".8"/>
+               <rect x="16" y="170" width="68" height="6"  rx="2" fill="#374151"/>`
       break
     case 'music':
       eyes = `<path d="M37,63 Q40,59 43,63" stroke="#333" fill="none" stroke-width="2"/>
@@ -127,43 +129,84 @@ const avatarSvg = computed(() => {
       break
     case 'reading':
       eyes = `<path d="M37,63 Q40,60 43,63" stroke="#333" fill="none" stroke-width="2"/>
-              <path d="M57,63 Q60,60 63,63" stroke="#333" fill="none" stroke-width="2"/>`
+               <path d="M57,63 Q60,60 63,63" stroke="#333" fill="none" stroke-width="2"/>`
+      arms = `<path d="M26,98 C20,112 22,126 26,138" stroke="${sk}" stroke-width="7" fill="none" stroke-linecap="round"/>
+               <path d="M74,98 C80,112 78,126 74,138" stroke="${sk}" stroke-width="7" fill="none" stroke-linecap="round"/>`
       acc = `<rect x="20" y="128" width="60" height="42" rx="4" fill="#8B4513"/>
-             <line x1="50" y1="128" x2="50" y2="170" stroke="#6B3410" stroke-width="2"/>
-             <rect x="22" y="130" width="26" height="38" rx="2" fill="#fef9f0"/>
-             <rect x="52" y="130" width="26" height="38" rx="2" fill="#fef9f0"/>`
+               <line x1="50" y1="128" x2="50" y2="170" stroke="#6B3410" stroke-width="2"/>
+               <rect x="22" y="130" width="26" height="38" rx="2" fill="#fef9f0"/>
+               <rect x="52" y="130" width="26" height="38" rx="2" fill="#fef9f0"/>
+               <rect x="24" y="134" width="20" height="2" rx="1" fill="#ccc"/>
+               <rect x="24" y="139" width="22" height="2" rx="1" fill="#ccc"/>
+               <rect x="24" y="144" width="18" height="2" rx="1" fill="#ccc"/>
+               <rect x="24" y="149" width="22" height="2" rx="1" fill="#ccc"/>
+               <rect x="54" y="134" width="20" height="2" rx="1" fill="#ccc"/>
+               <rect x="54" y="139" width="22" height="2" rx="1" fill="#ccc"/>
+               <rect x="54" y="144" width="18" height="2" rx="1" fill="#ccc"/>`
       break
     case 'sleeping':
       eyes = `<path d="M37,62 Q40,58 43,62" stroke="#333" fill="none" stroke-width="2"/>
-              <path d="M57,62 Q60,58 63,62" stroke="#333" fill="none" stroke-width="2"/>`
+               <path d="M57,62 Q60,58 63,62" stroke="#333" fill="none" stroke-width="2"/>`
       mouth = `<path d="M45,74 Q50,71 55,74" stroke="#c0392b" fill="none" stroke-width="1.5" stroke-linecap="round"/>`
       acc = `<text x="64" y="46" font-size="10" fill="#94a3b8" font-weight="bold">z</text>
-             <text x="70" y="36" font-size="14" fill="#94a3b8" font-weight="bold" opacity=".75">z</text>`
+               <text x="70" y="36" font-size="14" fill="#94a3b8" font-weight="bold" opacity=".75">z</text>
+               <text x="78" y="24" font-size="18" fill="#94a3b8" font-weight="bold" opacity=".5">Z</text>`
       break
     case 'eating':
       mouth = `<ellipse cx="50" cy="74" rx="5" ry="4" fill="#c0392b"/>`
+      arms = `<path d="M26,98 C22,112 26,126 32,136" stroke="${sk}" stroke-width="7" fill="none" stroke-linecap="round"/>
+               <path d="M74,98 C78,112 74,126 68,136" stroke="${sk}" stroke-width="7" fill="none" stroke-linecap="round"/>`
       acc = `<ellipse cx="50" cy="152" rx="24" ry="12" fill="#e2e8f0"/>
-             <ellipse cx="50" cy="148" rx="24" ry="10" fill="#f97316"/>
-             <path d="M26,148 Q50,138 74,148" fill="#fed7aa"/>`
+               <ellipse cx="50" cy="148" rx="24" ry="10" fill="#f97316"/>
+               <path d="M26,148 Q50,138 74,148" fill="#fed7aa"/>
+               <path d="M50,138 Q48,130 50,124" stroke="#cbd5e1" fill="none" stroke-width="2" opacity=".6"/>
+               <path d="M43,140 Q41,132 43,126" stroke="#cbd5e1" fill="none" stroke-width="2" opacity=".5"/>
+               <path d="M57,140 Q55,132 57,126" stroke="#cbd5e1" fill="none" stroke-width="2" opacity=".5"/>
+               <line x1="36" y1="122" x2="33" y2="148" stroke="#8B4513" stroke-width="2.5" stroke-linecap="round"/>
+               <line x1="42" y1="120" x2="38" y2="148" stroke="#8B4513" stroke-width="2.5" stroke-linecap="round"/>`
       break
     case 'gaming':
+      eyes = `<circle cx="40" cy="61" r="3.5" fill="#333"/>
+               <circle cx="60" cy="61" r="3.5" fill="#333"/>
+               <circle cx="41" cy="60" r="1.2" fill="#fff"/>
+               <circle cx="61" cy="60" r="1.2" fill="#fff"/>`
+      mouth = `<path d="M43,73 Q50,78 57,73" stroke="#c0392b" fill="none" stroke-width="1.5" stroke-linecap="round"/>`
+      arms = `<path d="M26,98 C20,114 22,128 26,140" stroke="${sk}" stroke-width="7" fill="none" stroke-linecap="round"/>
+               <path d="M74,98 C80,114 78,128 74,140" stroke="${sk}" stroke-width="7" fill="none" stroke-linecap="round"/>`
       acc = `<rect x="24" y="138" width="52" height="28" rx="14" fill="#374151"/>
-             <circle cx="36" cy="150" r="7" fill="#4a5568"/>
-             <circle cx="62" cy="146" r="3.5" fill="#ef4444"/>
-             <circle cx="68" cy="152" r="3.5" fill="#3b82f6"/>
-             <circle cx="56" cy="152" r="3.5" fill="#10b981"/>`
+               <circle cx="36" cy="150" r="7" fill="#4a5568"/>
+               <rect x="32" y="148" width="8" height="4" rx="1" fill="#6b7280"/>
+               <rect x="34" y="146" width="4" height="8" rx="1" fill="#6b7280"/>
+               <circle cx="62" cy="146" r="3.5" fill="#ef4444"/>
+               <circle cx="68" cy="152" r="3.5" fill="#3b82f6"/>
+               <circle cx="56" cy="152" r="3.5" fill="#10b981"/>
+               <circle cx="62" cy="158" r="3.5" fill="#f59e0b"/>`
       break
     case 'workout':
       eyes = `<path d="M37,61 Q40,57 43,61" stroke="#333" fill="none" stroke-width="2"/>
-              <path d="M57,61 Q60,57 63,61" stroke="#333" fill="none" stroke-width="2"/>`
+               <path d="M57,61 Q60,57 63,61" stroke="#333" fill="none" stroke-width="2"/>`
       mouth = `<path d="M43,73 Q50,79 57,73" stroke="#c0392b" fill="none" stroke-width="2" stroke-linecap="round"/>`
       arms = `<path d="M26,98 C16,90 12,80 16,134" stroke="${sk}" stroke-width="7" fill="none" stroke-linecap="round"/>
-              <path d="M74,98 C84,90 88,80 84,134" stroke="${sk}" stroke-width="7" fill="none" stroke-linecap="round"/>`
-      acc = `<rect x="8" y="132" width="84" height="8" rx="4" fill="#4a5568"/>
-             <rect x="6" y="126" width="14" height="20" rx="7" fill="#374151"/>
-             <rect x="9" y="129" width="7" height="14" rx="3" fill="#6b7280"/>
-             <rect x="80" y="126" width="14" height="20" rx="7" fill="#374151"/>
-             <rect x="84" y="129" width="7" height="14" rx="3" fill="#6b7280"/>`
+               <path d="M74,98 C84,90 88,80 84,134" stroke="${sk}" stroke-width="7" fill="none" stroke-linecap="round"/>`
+      acc = `<rect x="8"  y="132" width="84" height="8" rx="4" fill="#4a5568"/>
+               <rect x="6"  y="126" width="14" height="20" rx="7" fill="#374151"/>
+               <rect x="9"  y="129" width="7"  height="14" rx="3" fill="#6b7280"/>
+               <rect x="80" y="126" width="14" height="20" rx="7" fill="#374151"/>
+               <rect x="84" y="129" width="7"  height="14" rx="3" fill="#6b7280"/>
+               <path d="M76,48 Q78,54 76,58 Q74,54 76,48" fill="#93c5fd" opacity=".8"/>`
+      break
+
+    case 'meeting':
+      mouth = `<path d="M44,73 Q50,76 56,73" stroke="#c0392b" fill="none" stroke-width="1.5" stroke-linecap="round"/>`
+      arms = `<path d="M26,98 C22,114 26,126 32,136" stroke="${sk}" stroke-width="7" fill="none" stroke-linecap="round"/>
+               <path d="M74,98 C78,114 74,126 68,132" stroke="${sk}" stroke-width="7" fill="none" stroke-linecap="round"/>`
+      acc = `<rect x="30" y="122" width="40" height="50" rx="4" fill="#f1f5f9"/>
+               <rect x="38" y="118" width="24" height="10" rx="3" fill="#e2e8f0"/>
+               <rect x="33" y="130" width="30" height="2" rx="1" fill="#94a3b8"/>
+               <rect x="33" y="136" width="26" height="2" rx="1" fill="#94a3b8"/>
+               <rect x="33" y="142" width="30" height="2" rx="1" fill="#94a3b8"/>
+               <rect x="33" y="148" width="20" height="2" rx="1" fill="#94a3b8"/>
+               <line x1="66" y1="122" x2="70" y2="152" stroke="#374151" stroke-width="2" stroke-linecap="round"/>`
       break
   }
 
