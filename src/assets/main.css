@@ -401,12 +401,17 @@ body {
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s;
+  background: rgba(148, 163, 184, 0.08);
+  opacity: 0.62;
 }
 .char-side-item:hover {
-  background: var(--surface2);
+  background: rgba(148, 163, 184, 0.14);
+  opacity: 0.9;
 }
 .char-side-item.sel {
-  background: rgba(99, 102, 241, 0.15);
+  background: rgba(99, 102, 241, 0.3);
+  box-shadow: inset 0 0 0 1px rgba(129, 140, 248, 0.75);
+  opacity: 1;
 }
 .mini-avatar {
   width: 36px;
@@ -426,6 +431,12 @@ body {
 .char-side-state {
   font-size: 0.72rem;
   color: var(--muted);
+}
+.char-side-item.sel .char-side-name {
+  color: #eef2ff;
+}
+.char-side-item.sel .char-side-state {
+  color: #c7d2fe;
 }
 .me-badge {
   font-size: 0.6rem;
