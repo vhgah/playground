@@ -19,7 +19,8 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
 import { auth } from './services/firebase'
-import { onAuthStateChanged } from 'firebase/auth'
+import { getRedirectResult, onAuthStateChanged } from 'firebase/auth'
+import { loadUserProfile } from './services/userProfile'
 import { state } from './stores/useAppStore'
 
 import Login from './components/Login.vue'
@@ -29,12 +30,34 @@ import MainLayout from './components/MainLayout.vue'
 const screen = computed(() => state.screen)
 
 onMounted(() => {
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
+  void (async () => {
+    try {
+      await getRedirectResult(auth)
+    } catch (e) {
+      console.warn('getRedirectResult failed', e)
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        state.user = null
+        state.screen = 'login'
+        return
+      }
+
       state.user = user
-      if (!state.users[user.uid]) {
+      state.screen = 'loading'
+
+      try {
+        const { screen, record } = await loadUserProfile(user.uid, user)
+        state.users[user.uid] = record
+        state.step = screen === 'creator' ? 0 : state.step
+        state.screen = screen
+        state.selectedId = user.uid
+      } catch (e) {
+        console.error('loadUserProfile failed', e)
+        const display = user.displayName?.trim()
         state.users[user.uid] = {
-          name: user.displayName || 'New Character',
+          name: display || 'New Character',
           gender: 'other',
           state: 'idle',
           public: true,
@@ -46,14 +69,11 @@ onMounted(() => {
           email: user.email,
           tasks: [],
         }
+        state.step = 0
         state.screen = 'creator'
-      } else {
-        state.screen = 'main'
+        state.selectedId = user.uid
       }
-      state.selectedId = user.uid
-    } else {
-      state.screen = 'login'
-    }
-  })
+    })
+  })()
 })
 </script>

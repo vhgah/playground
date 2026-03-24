@@ -31,9 +31,18 @@
 
 <script setup lang="ts">
 import { auth, provider } from '../services/firebase'
-import { signInWithRedirect } from 'firebase/auth'
+import { signInWithPopup, signInWithRedirect } from 'firebase/auth'
 
-function login() {
-  signInWithRedirect(auth, provider)
+async function login() {
+  try {
+    await signInWithPopup(auth, provider)
+  } catch (e: unknown) {
+    const code = e && typeof e === 'object' && 'code' in e ? String((e as { code: string }).code) : ''
+    if (code === 'auth/popup-blocked') {
+      await signInWithRedirect(auth, provider)
+      return
+    }
+    console.error('Google sign-in failed', e)
+  }
 }
 </script>

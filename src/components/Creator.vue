@@ -165,7 +165,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive } from 'vue'
+import { computed, reactive, watch } from 'vue'
 import { ref, update } from 'firebase/database'
 import CharacterAvatar from './CharacterAvatar.vue'
 import { db } from '../services/firebase'
@@ -192,8 +192,10 @@ const outfitColors = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#ec4899'] as 
 const step = computed(() => state.step)
 const userId = computed(() => state.user?.uid)
 
+const DEFAULT_NAME = 'New Character'
+
 const char = reactive<CharacterRecord>({
-  name: state.user?.displayName || 'New Character',
+  name: DEFAULT_NAME,
   gender: 'other',
   state: 'idle',
   public: true,
@@ -201,10 +203,32 @@ const char = reactive<CharacterRecord>({
   skinTone: skinTones[0]!,
   hairColor: hairColors[0]!,
   outfitColor: outfitColors[0]!,
-  photoURL: state.user?.photoURL,
-  email: state.user?.email,
+  photoURL: null,
+  email: null,
   tasks: [],
 })
+
+/** Creator mounts before login; profile is created in App.vue. Sync when entering creator. */
+watch(
+  () => [state.screen, state.user?.uid] as const,
+  ([screen, uid]) => {
+    if (screen !== 'creator' || !uid) return
+    const u = state.users[uid]
+    if (!u) return
+    char.name = u.name || state.user?.displayName?.trim() || DEFAULT_NAME
+    char.gender = u.gender
+    char.state = u.state
+    char.public = u.public
+    char.scene = u.scene
+    char.skinTone = u.skinTone
+    char.hairColor = u.hairColor
+    char.outfitColor = u.outfitColor
+    char.photoURL = u.photoURL ?? state.user?.photoURL ?? null
+    char.email = u.email ?? state.user?.email ?? null
+    char.tasks = u.tasks?.length ? [...u.tasks] : []
+  },
+  { immediate: true },
+)
 
 const selectedGenderLabel = computed(() => {
   return genderOptions.find((option) => option.value === char.gender)?.label || 'Other'
@@ -241,7 +265,7 @@ async function save() {
   if (!userId.value) return
 
   try {
-    await update(ref(db, `users/${uid}`), { ...char })
+    await update(ref(db, `users/${uid}`), { ...char, profileComplete: true })
   } catch (error) {
     console.warn('Unable to sync character to Firebase', error)
   }
