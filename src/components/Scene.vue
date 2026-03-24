@@ -10,7 +10,7 @@
         :character="character"
         :selected="state.selectedId === character.id"
         :is-me="character.id === state.user?.uid"
-        @select="state.selectedId = character.id"
+        @select="selectCharacter(character.id)"
       />
     </div>
 
@@ -68,4 +68,9 @@ const sceneUsers = computed(() => {
 })
 
 const sceneDeco = computed(() => SCENE_DECO[state.currentScene] || '')
+
+function selectCharacter(characterId: string) {
+  state.selectedId = characterId
+  state.showCharPanel = true
+}
 </script>

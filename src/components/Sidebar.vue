@@ -24,7 +24,7 @@
       class="char-side-item"
       :class="{ sel: state.selectedId === character.id }"
       type="button"
-      @click="state.selectedId = character.id"
+      @click="selectCharacter(character.id)"
     >
       <div class="mini-avatar">
         <CharacterAvatar :character="character" />
@@ -121,6 +121,11 @@ async function changeScene(sceneId: SceneId) {
   } catch (error) {
     console.warn('Unable to sync scene to Firebase', error)
   }
+}
+
+function selectCharacter(characterId: string) {
+  state.selectedId = characterId
+  state.showCharPanel = true
 }
 
 async function logout() {

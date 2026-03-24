@@ -652,12 +652,28 @@ body {
 .char-panel.hidden {
   width: 0;
 }
+.panel-open-btn {
+  position: fixed;
+  right: 14px;
+  top: 14px;
+  z-index: 120;
+  width: 36px;
+  height: 36px;
+  box-shadow: var(--shadow);
+}
 .panel-head {
   padding: 1.1rem 1rem 0.9rem;
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: flex-start;
   gap: 10px;
+}
+.panel-close {
+  margin-left: auto;
+  width: 28px;
+  height: 28px;
+  font-size: 0.9rem;
+  flex-shrink: 0;
 }
 .panel-avatar {
   width: 56px;

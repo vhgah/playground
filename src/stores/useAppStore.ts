@@ -60,17 +60,6 @@ const demoUsers: Record<string, CharacterRecord> = {
     outfitColor: '#f59e0b',
     tasks: [{ id: 1, text: 'Sync with product team', done: false }],
   },
-  'demo-minh': {
-    name: 'Minh',
-    gender: 'other',
-    state: 'gaming',
-    public: true,
-    scene: 'cafe',
-    skinTone: '#e0ac69',
-    hairColor: '#111827',
-    outfitColor: '#10b981',
-    tasks: [{ id: 1, text: 'Recharge with coffee', done: false }],
-  },
 }
 
 export const state = reactive<{
@@ -81,6 +70,7 @@ export const state = reactive<{
   selectedId: string | null
   currentScene: SceneId
   showSettings: boolean
+  showCharPanel: boolean
   privacyMode: boolean
 }>({
   user: null,
@@ -90,6 +80,7 @@ export const state = reactive<{
   selectedId: 'demo-alice',
   currentScene: 'office',
   showSettings: false,
+  showCharPanel: true,
   privacyMode: false,
 })
 

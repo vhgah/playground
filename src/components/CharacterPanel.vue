@@ -1,5 +1,5 @@
 <template>
-  <aside class="char-panel" :class="{ hidden: !character }">
+  <aside class="char-panel" :class="{ hidden: !character || !state.showCharPanel }">
     <template v-if="character">
       <div class="panel-head">
         <CharacterAvatar class="panel-avatar" :character="character" />
@@ -9,6 +9,8 @@
           <div class="panel-gender">{{ genderLabel }}</div>
           <div class="panel-state-badge">{{ stateMeta.icon }} {{ stateMeta.label }}</div>
         </div>
+
+        <button class="btn-icon panel-close" type="button" @click="state.showCharPanel = false">✕</button>
       </div>
 
       <div class="panel-body">
