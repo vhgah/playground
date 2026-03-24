@@ -18,7 +18,7 @@
     </div>
 
     <section v-if="step === 0" class="creator-step active">
-      <div class="step-sublabel">Profile</div>
+      <div class="step-sublabel">Step 1 / 4 - Basic profile</div>
 
       <div class="form-group">
         <label class="form-label" for="char-name">Display name</label>
@@ -43,20 +43,36 @@
     </section>
 
     <section v-else-if="step === 1" class="creator-step active">
-      <div class="step-sublabel">Appearance</div>
+      <div class="step-sublabel">Step 2 / 4 - Appearance</div>
 
       <div class="form-group">
-        <div class="form-label">Skin tone</div>
+        <div class="form-label">Skin color</div>
         <div class="color-row">
           <button
-            v-for="color in skinTones"
+            v-for="color in skinColors"
             :key="color"
             class="swatch"
-            :class="{ sel: char.skinTone === color }"
+            :class="{ sel: char.skinColor === color }"
             :style="{ background: color }"
             type="button"
-            @click="char.skinTone = color"
+            @click="char.skinColor = color"
           />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="form-label">Hair style</div>
+        <div class="opt-row">
+          <button
+            v-for="option in hairStyleOptions"
+            :key="option.value"
+            class="opt-btn"
+            :class="{ sel: char.hairStyle === option.value }"
+            type="button"
+            @click="char.hairStyle = option.value"
+          >
+            {{ option.label }}
+          </button>
         </div>
       </div>
 
@@ -74,25 +90,60 @@
           />
         </div>
       </div>
+    </section>
+
+    <section v-else-if="step === 2" class="creator-step active">
+      <div class="step-sublabel">Step 3 / 4 - Outfit</div>
 
       <div class="form-group">
-        <div class="form-label">Outfit color</div>
+        <div class="form-label">Top style</div>
+        <div class="opt-row">
+          <button
+            v-for="option in topStyleOptions"
+            :key="option.value"
+            class="opt-btn"
+            :class="{ sel: char.topStyle === option.value }"
+            type="button"
+            @click="char.topStyle = option.value"
+          >
+            {{ option.label }}
+          </button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="form-label">Top color</div>
         <div class="color-row">
           <button
-            v-for="color in outfitColors"
+            v-for="color in topColors"
             :key="color"
             class="swatch"
-            :class="{ sel: char.outfitColor === color }"
+            :class="{ sel: char.topColor === color }"
             :style="{ background: color }"
             type="button"
-            @click="char.outfitColor = color"
+            @click="char.topColor = color"
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="form-label">Bottom color</div>
+        <div class="color-row">
+          <button
+            v-for="color in bottomColors"
+            :key="color"
+            class="swatch"
+            :class="{ sel: char.bottomColor === color }"
+            :style="{ background: color }"
+            type="button"
+            @click="char.bottomColor = color"
           />
         </div>
       </div>
     </section>
 
-    <section v-else-if="step === 2" class="creator-step active">
-      <div class="step-sublabel">Workspace</div>
+    <section v-else class="creator-step active">
+      <div class="step-sublabel">Step 4 / 4 - Review</div>
 
       <div class="form-group">
         <div class="form-label">Default scene</div>
@@ -113,40 +164,24 @@
       <div class="form-group">
         <div class="form-label">Visibility</div>
         <div class="opt-row">
-          <button
-            class="opt-btn"
-            :class="{ sel: char.public }"
-            type="button"
-            @click="char.public = true"
-          >
+          <button class="opt-btn" :class="{ sel: char.public }" type="button" @click="char.public = true">
             Public
           </button>
-          <button
-            class="opt-btn"
-            :class="{ sel: !char.public }"
-            type="button"
-            @click="char.public = false"
-          >
+          <button class="opt-btn" :class="{ sel: !char.public }" type="button" @click="char.public = false">
             Private
           </button>
         </div>
       </div>
-    </section>
-
-    <section v-else class="creator-step active">
-      <div class="step-sublabel">Review</div>
 
       <div class="review-grid">
         <div><b>Name:</b> {{ char.name || 'Unnamed character' }}</div>
         <div><b>Gender:</b> {{ selectedGenderLabel }}</div>
+        <div><b>Skin:</b> <span class="color-dot" :style="{ background: char.skinColor }" /></div>
+        <div><b>Hair:</b> {{ selectedHairStyleLabel }} <span class="color-dot" :style="{ background: char.hairColor }" /></div>
+        <div><b>Top:</b> {{ selectedTopStyleLabel }} <span class="color-dot" :style="{ background: char.topColor }" /></div>
+        <div><b>Bottom:</b> <span class="color-dot" :style="{ background: char.bottomColor }" /></div>
         <div><b>Scene:</b> {{ selectedSceneLabel }}</div>
         <div><b>Visibility:</b> {{ char.public ? 'Public' : 'Private' }}</div>
-        <div>
-          <b>Palette:</b>
-          Skin <span class="color-dot" :style="{ background: char.skinTone }" />,
-          Hair <span class="color-dot" :style="{ background: char.hairColor }" />,
-          Outfit <span class="color-dot" :style="{ background: char.outfitColor }" />
-        </div>
       </div>
     </section>
 
@@ -177,6 +212,20 @@ const genderOptions = [
   { label: 'Other', value: 'other' },
 ] as const
 
+const hairStyleOptions = [
+  { label: 'Short', value: '0' },
+  { label: 'Long', value: '1' },
+  { label: 'Curly', value: '2' },
+  { label: 'Bun', value: '3' },
+] as const
+
+const topStyleOptions = [
+  { label: 'T-shirt', value: '0' },
+  { label: 'Shirt', value: '1' },
+  { label: 'Jacket', value: '2' },
+  { label: 'Dress', value: '3' },
+] as const
+
 const sceneOptions: Array<{ label: string; value: SceneId }> = [
   { label: 'Office', value: 'office' },
   { label: 'Home', value: 'home' },
@@ -185,13 +234,13 @@ const sceneOptions: Array<{ label: string; value: SceneId }> = [
   { label: 'Park', value: 'park' },
 ]
 
-const skinTones = ['#f1c27d', '#e0ac69', '#c68642', '#8d5524'] as const
-const hairColors = ['#111827', '#2f241d', '#6b4226', '#b45309'] as const
-const outfitColors = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#ec4899'] as const
+const skinColors = ['#FFDBB4', '#F1C27D', '#E0A060', '#C68642', '#8D5524', '#4A2912'] as const
+const hairColors = ['#1a1a1a', '#4a3728', '#8B4513', '#DAA520', '#FF6B6B', '#9B59B6', '#3498DB', '#E8E8E8'] as const
+const topColors = ['#6366f1', '#ef4444', '#10b981', '#f59e0b', '#06b6d4', '#ec4899', '#f8fafc', '#374151'] as const
+const bottomColors = ['#1e3a5f', '#374151', '#7c3aed', '#065f46', '#92400e', '#ec4899', '#e5e7eb', '#1f2937'] as const
 
 const step = computed(() => state.step)
 const userId = computed(() => state.user?.uid)
-
 const DEFAULT_NAME = 'New Character'
 
 const char = reactive<CharacterRecord>({
@@ -200,16 +249,18 @@ const char = reactive<CharacterRecord>({
   state: 'idle',
   public: true,
   scene: 'office',
-  skinTone: skinTones[0]!,
-  hairColor: hairColors[0]!,
-  outfitColor: outfitColors[0]!,
+  skinColor: skinColors[0],
+  hairStyle: '0',
+  hairColor: hairColors[0],
+  topStyle: '0',
+  topColor: topColors[0],
+  bottomColor: bottomColors[0],
   photoURL: null,
   email: null,
   tasks: [],
   spotify: null,
 })
 
-/** Creator mounts before login; profile is created in App.vue. Sync when entering creator. */
 watch(
   () => [state.screen, state.user?.uid] as const,
   ([screen, uid]) => {
@@ -221,9 +272,12 @@ watch(
     char.state = u.state
     char.public = u.public
     char.scene = u.scene
-    char.skinTone = u.skinTone
+    char.skinColor = u.skinColor
+    char.hairStyle = u.hairStyle
     char.hairColor = u.hairColor
-    char.outfitColor = u.outfitColor
+    char.topStyle = u.topStyle
+    char.topColor = u.topColor
+    char.bottomColor = u.bottomColor
     char.photoURL = u.photoURL ?? state.user?.photoURL ?? null
     char.email = u.email ?? state.user?.email ?? null
     char.tasks = u.tasks?.length ? [...u.tasks] : []
@@ -232,13 +286,10 @@ watch(
   { immediate: true },
 )
 
-const selectedGenderLabel = computed(() => {
-  return genderOptions.find((option) => option.value === char.gender)?.label || 'Other'
-})
-
-const selectedSceneLabel = computed(() => {
-  return sceneOptions.find((option) => option.value === char.scene)?.label || 'Office'
-})
+const selectedGenderLabel = computed(() => genderOptions.find((option) => option.value === char.gender)?.label || 'Other')
+const selectedHairStyleLabel = computed(() => hairStyleOptions.find((option) => option.value === char.hairStyle)?.label || 'Short')
+const selectedTopStyleLabel = computed(() => topStyleOptions.find((option) => option.value === char.topStyle)?.label || 'T-shirt')
+const selectedSceneLabel = computed(() => sceneOptions.find((option) => option.value === char.scene)?.label || 'Office')
 
 function prev() {
   if (state.step > 0) state.step -= 1
@@ -249,7 +300,6 @@ function next() {
     state.step += 1
     return
   }
-
   void save()
 }
 

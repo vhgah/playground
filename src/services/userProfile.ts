@@ -41,7 +41,7 @@ export function isOnboardedProfile(val: unknown): boolean {
   return (
     typeof v.name === 'string' &&
     typeof v.scene === 'string' &&
-    typeof v.skinTone === 'string'
+    (typeof v.skinColor === 'string' || typeof v.skinTone === 'string')
   )
 }
 
@@ -56,9 +56,12 @@ export function defaultCharacterFromAuth(
     state: 'idle',
     public: true,
     scene: 'office',
-    skinTone: '#f1c27d',
+    skinColor: '#FFDBB4',
+    hairStyle: '0',
     hairColor: '#1f2937',
-    outfitColor: '#6366f1',
+    topStyle: '0',
+    topColor: '#6366f1',
+    bottomColor: '#1e3a5f',
     photoURL: user.photoURL,
     email: user.email,
     tasks: [],
@@ -92,9 +95,22 @@ export function mergeRtdbProfile(
     state: asCharacterState(v.state, base.state),
     public: typeof v.public === 'boolean' ? v.public : base.public,
     scene: asSceneId(v.scene, base.scene),
-    skinTone: typeof v.skinTone === 'string' ? v.skinTone : base.skinTone,
+    skinColor:
+      typeof v.skinColor === 'string'
+        ? v.skinColor
+        : typeof v.skinTone === 'string'
+          ? v.skinTone
+          : base.skinColor,
+    hairStyle: v.hairStyle === '0' || v.hairStyle === '1' || v.hairStyle === '2' || v.hairStyle === '3' ? v.hairStyle : base.hairStyle,
     hairColor: typeof v.hairColor === 'string' ? v.hairColor : base.hairColor,
-    outfitColor: typeof v.outfitColor === 'string' ? v.outfitColor : base.outfitColor,
+    topStyle: v.topStyle === '0' || v.topStyle === '1' || v.topStyle === '2' || v.topStyle === '3' ? v.topStyle : base.topStyle,
+    topColor:
+      typeof v.topColor === 'string'
+        ? v.topColor
+        : typeof v.outfitColor === 'string'
+          ? v.outfitColor
+          : base.topColor,
+    bottomColor: typeof v.bottomColor === 'string' ? v.bottomColor : base.bottomColor,
     photoURL: v.photoURL === null || typeof v.photoURL === 'string' ? v.photoURL : user.photoURL ?? base.photoURL,
     email: v.email === null || typeof v.email === 'string' ? v.email : user.email ?? base.email,
     tasks,
@@ -161,9 +177,22 @@ export function recordFromRtdb(raw: Record<string, unknown>): CharacterRecord | 
     state: asCharacterState(raw.state, 'idle'),
     public: typeof raw.public === 'boolean' ? raw.public : true,
     scene: asSceneId(raw.scene, 'office'),
-    skinTone: typeof raw.skinTone === 'string' ? raw.skinTone : '#f1c27d',
+    skinColor:
+      typeof raw.skinColor === 'string'
+        ? raw.skinColor
+        : typeof raw.skinTone === 'string'
+          ? raw.skinTone
+          : '#FFDBB4',
+    hairStyle: raw.hairStyle === '0' || raw.hairStyle === '1' || raw.hairStyle === '2' || raw.hairStyle === '3' ? raw.hairStyle : '0',
     hairColor: typeof raw.hairColor === 'string' ? raw.hairColor : '#1f2937',
-    outfitColor: typeof raw.outfitColor === 'string' ? raw.outfitColor : '#6366f1',
+    topStyle: raw.topStyle === '0' || raw.topStyle === '1' || raw.topStyle === '2' || raw.topStyle === '3' ? raw.topStyle : '0',
+    topColor:
+      typeof raw.topColor === 'string'
+        ? raw.topColor
+        : typeof raw.outfitColor === 'string'
+          ? raw.outfitColor
+          : '#6366f1',
+    bottomColor: typeof raw.bottomColor === 'string' ? raw.bottomColor : '#1e3a5f',
     photoURL: typeof raw.photoURL === 'string' ? raw.photoURL : null,
     email: typeof raw.email === 'string' ? raw.email : null,
     tasks,

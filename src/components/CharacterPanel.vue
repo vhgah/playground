@@ -10,7 +10,9 @@
           <div class="panel-state-badge">{{ stateMeta.icon }} {{ stateMeta.label }}</div>
         </div>
 
-        <button class="btn-icon panel-close" type="button" @click="state.showCharPanel = false">✕</button>
+        <button class="btn-icon panel-close" type="button" @click="state.showCharPanel = false">
+          ✕
+        </button>
       </div>
 
       <div class="panel-body">
@@ -38,72 +40,200 @@
           </div>
         </div>
 
+        <div v-if="isMine" class="panel-sec">
+          <div class="form-group">
+            <div class="panel-sec-title">Skin color</div>
+            <div class="color-row">
+              <button
+                v-for="color in skinColors"
+                :key="color"
+                class="swatch small"
+                :class="{ sel: character.skinColor === color }"
+                :style="{ background: color }"
+                type="button"
+                @click="updateAppearance({ skinColor: color })"
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="panel-sec-title">Hair style</div>
+            <div class="opt-row">
+              <button
+                v-for="option in hairStyleOptions"
+                :key="option.value"
+                class="opt-btn"
+                :class="{ sel: character.hairStyle === option.value }"
+                type="button"
+                @click="updateAppearance({ hairStyle: option.value })"
+              >
+                {{ option.label }}
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="form-label">Hair color</div>
+            <div class="color-row">
+              <button
+                v-for="color in hairColors"
+                :key="color"
+                class="swatch small"
+                :class="{ sel: character.hairColor === color }"
+                :style="{ background: color }"
+                type="button"
+                @click="updateAppearance({ hairColor: color })"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div v-if="isMine" class="panel-sec">
+          <div class="panel-sec-title">Outfit</div>
+
+          <div class="form-group">
+            <div class="form-label">Top style</div>
+            <div class="opt-row">
+              <button
+                v-for="option in topStyleOptions"
+                :key="option.value"
+                class="opt-btn"
+                :class="{ sel: character.topStyle === option.value }"
+                type="button"
+                @click="updateAppearance({ topStyle: option.value })"
+              >
+                {{ option.label }}
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="form-label">Top color</div>
+            <div class="color-row">
+              <button
+                v-for="color in topColors"
+                :key="color"
+                class="swatch small"
+                :class="{ sel: character.topColor === color }"
+                :style="{ background: color }"
+                type="button"
+                @click="updateAppearance({ topColor: color })"
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="form-label">Bottom color</div>
+            <div class="color-row">
+              <button
+                v-for="color in bottomColors"
+                :key="color"
+                class="swatch small"
+                :class="{ sel: character.bottomColor === color }"
+                :style="{ background: color }"
+                type="button"
+                @click="updateAppearance({ bottomColor: color })"
+              />
+            </div>
+          </div>
+        </div>
+
         <div v-if="isMine && state.spotify.connected" class="panel-sec">
           <div class="panel-sec-title">Now Listening</div>
           <div class="other-view" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
             <div v-if="state.spotify.track" class="state-label">
               {{ state.spotify.track.isPlaying ? '🎵' : '⏯' }} {{ state.spotify.track.name }}
             </div>
-            <div v-if="state.spotify.track" class="state-sub">{{ state.spotify.track.artists.join(', ') }}</div>
+            <div v-if="state.spotify.track" class="state-sub">
+              {{ state.spotify.track.artists.join(', ') }}
+            </div>
             <div v-else class="state-sub">No song found. Open settings to refresh Spotify.</div>
           </div>
         </div>
-
-        <!-- <div class="panel-sec">
-          <div class="panel-sec-title">Tasks</div>
-
-          <template v-if="isMine">
-            <div class="task-add">
-              <input
-                v-model="newTask"
-                class="task-input"
-                placeholder="Add a new task"
-                @keydown.enter.prevent="addTask"
-              />
-              <button class="btn btn-primary btn-sm" type="button" @click="addTask">Add</button>
-            </div>
-
-            <div class="task-list">
-              <div v-for="task in character.tasks" :key="task.id" class="task-item">
-                <button
-                  class="task-check"
-                  :class="{ done: task.done }"
-                  type="button"
-                  @click="task.done = !task.done"
-                >
-                  ✓
-                </button>
-                <div class="task-text" :class="{ done: task.done }">{{ task.text }}</div>
-                <button class="task-del" type="button" @click="removeTask(task.id)">✕</button>
-              </div>
-            </div>
-          </template>
-
-          <div v-else class="other-view">
-            <div class="state-label">{{ character.tasks.length }} active items</div>
-            <div class="state-sub">Task editing is available only on your own character.</div>
-          </div>
-        </div> -->
       </div>
     </template>
   </aside>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { ref as dbRef, update } from 'firebase/database'
 import { db } from '../services/firebase'
 import CharacterAvatar from './CharacterAvatar.vue'
-import { selectedUser, state, type CharacterState } from '../stores/useAppStore'
+import {
+  selectedUser,
+  state,
+  type CharacterRecord,
+  type CharacterState,
+  type SceneId,
+} from '../stores/useAppStore'
 import { CHARACTER_STATES } from '../constants/states'
 
-const newTask = ref('')
-
 const states: Array<{ id: CharacterState; label: string; icon: string }> = CHARACTER_STATES
-
 const fallbackState = { id: 'idle' as CharacterState, label: 'Relaxing', icon: '😊' }
 
+const genderOptions = [
+  { label: 'Female', value: 'female' },
+  { label: 'Male', value: 'male' },
+  { label: 'Other', value: 'other' },
+] as const
+
+const hairStyleOptions = [
+  { label: 'Short', value: '0' },
+  { label: 'Long', value: '1' },
+  { label: 'Curly', value: '2' },
+  { label: 'Bun', value: '3' },
+] as const
+
+const topStyleOptions = [
+  { label: 'T-shirt', value: '0' },
+  { label: 'Shirt', value: '1' },
+  { label: 'Jacket', value: '2' },
+  { label: 'Dress', value: '3' },
+] as const
+
+const sceneOptions: Array<{ label: string; value: SceneId }> = [
+  { label: 'Office', value: 'office' },
+  { label: 'Home', value: 'home' },
+  { label: 'Beach', value: 'beach' },
+  { label: 'Cafe', value: 'cafe' },
+  { label: 'Park', value: 'park' },
+]
+
+const skinColors = ['#FFDBB4', '#F1C27D', '#E0A060', '#C68642', '#8D5524', '#4A2912'] as const
+const hairColors = [
+  '#1a1a1a',
+  '#4a3728',
+  '#8B4513',
+  '#DAA520',
+  '#FF6B6B',
+  '#9B59B6',
+  '#3498DB',
+  '#E8E8E8',
+] as const
+const topColors = [
+  '#6366f1',
+  '#ef4444',
+  '#10b981',
+  '#f59e0b',
+  '#06b6d4',
+  '#ec4899',
+  '#f8fafc',
+  '#374151',
+] as const
+const bottomColors = [
+  '#1e3a5f',
+  '#374151',
+  '#7c3aed',
+  '#065f46',
+  '#92400e',
+  '#ec4899',
+  '#e5e7eb',
+  '#1f2937',
+] as const
+
 const character = selectedUser
+const draftName = ref('')
 
 const isMine = computed(() => {
   return !!character.value && character.value === state.users[state.user?.uid || '']
@@ -133,32 +263,50 @@ const sceneLabel = computed(() => {
   return map[character.value?.scene || 'office']
 })
 
-async function changeState(newState: CharacterState) {
-  if (!character.value) return
-  character.value.state = newState
+watch(
+  () => character.value?.name,
+  (name) => {
+    draftName.value = name || ''
+  },
+  { immediate: true },
+)
 
+async function syncPatch(patch: Partial<CharacterRecord>) {
   const uid = state.user?.uid
-  if (!uid) return
+  if (!uid || !state.users[uid]) return
+
+  Object.assign(state.users[uid], patch)
+
   try {
-    await update(dbRef(db, `users/${uid}`), { state: newState })
+    await update(dbRef(db, `users/${uid}`), patch)
   } catch (e) {
-    console.warn('Unable to sync state to Firebase', e)
+    console.warn('Unable to sync profile patch to Firebase', e)
   }
 }
 
-function addTask() {
-  if (!character.value || !newTask.value.trim()) return
-
-  character.value.tasks.unshift({
-    id: Date.now(),
-    text: newTask.value.trim(),
-    done: false,
-  })
-  newTask.value = ''
+async function changeState(newState: CharacterState) {
+  if (!character.value) return
+  await syncPatch({ state: newState })
 }
 
-function removeTask(taskId: number) {
-  if (!character.value) return
-  character.value.tasks = character.value.tasks.filter((task) => task.id !== taskId)
+async function saveName() {
+  const nextName = draftName.value.trim()
+  if (!nextName || !isMine.value || !character.value || nextName === character.value.name) {
+    draftName.value = character.value?.name || ''
+    return
+  }
+
+  await syncPatch({ name: nextName })
+}
+
+async function updateAppearance(patch: Partial<CharacterRecord>) {
+  if (!isMine.value) return
+  await syncPatch(patch)
+}
+
+async function updateScene(scene: SceneId) {
+  if (!isMine.value) return
+  state.currentScene = scene
+  await syncPatch({ scene })
 }
 </script>

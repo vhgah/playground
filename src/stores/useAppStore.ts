@@ -26,9 +26,12 @@ export interface CharacterRecord {
   state: CharacterState
   public: boolean
   scene: SceneId
-  skinTone: string
+  skinColor: string
+  hairStyle: '0' | '1' | '2' | '3'
   hairColor: string
-  outfitColor: string
+  topStyle: '0' | '1' | '2' | '3'
+  topColor: string
+  bottomColor: string
   photoURL?: string | null
   email?: string | null
   tasks: TaskItem[]
