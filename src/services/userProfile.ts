@@ -18,6 +18,14 @@ function asGender(v: unknown): CharacterRecord['gender'] {
   return v === 'female' || v === 'male' || v === 'other' ? v : 'other'
 }
 
+export function normalizeGoogleGender(v: unknown): CharacterRecord['gender'] {
+  if (typeof v !== 'string') return 'other'
+  const g = v.trim().toLowerCase()
+  if (g === 'male') return 'male'
+  if (g === 'female') return 'female'
+  return 'other'
+}
+
 /** Đã hoàn tất creator (hoặc bản ghi cũ đủ field). */
 export function isOnboardedProfile(val: unknown): boolean {
   if (!val || typeof val !== 'object') return false
@@ -30,11 +38,14 @@ export function isOnboardedProfile(val: unknown): boolean {
   )
 }
 
-export function defaultCharacterFromAuth(user: User): CharacterRecord {
+export function defaultCharacterFromAuth(
+  user: User,
+  preferredGender: CharacterRecord['gender'] = 'other',
+): CharacterRecord {
   const display = user.displayName?.trim()
   return {
     name: display || 'New Character',
-    gender: 'other',
+    gender: preferredGender,
     state: 'idle',
     public: true,
     scene: 'office',
@@ -47,8 +58,12 @@ export function defaultCharacterFromAuth(user: User): CharacterRecord {
   }
 }
 
-export function mergeRtdbProfile(val: unknown, user: User): CharacterRecord {
-  const base = defaultCharacterFromAuth(user)
+export function mergeRtdbProfile(
+  val: unknown,
+  user: User,
+  preferredGender: CharacterRecord['gender'] = 'other',
+): CharacterRecord {
+  const base = defaultCharacterFromAuth(user, preferredGender)
   if (!val || typeof val !== 'object') return base
   const v = val as Record<string, unknown>
 
@@ -84,7 +99,11 @@ export type ProfileRoute = { screen: 'main' | 'creator'; record: CharacterRecord
  * Đọc /users/{uid}; nếu chưa có thì tạo stub trên RTDB (profileComplete: false).
  * Reload trang vẫn phân nhánh đúng nhờ dữ liệu trên server.
  */
-export async function loadUserProfile(uid: string, user: User): Promise<ProfileRoute> {
+export async function loadUserProfile(
+  uid: string,
+  user: User,
+  preferredGender: CharacterRecord['gender'] = 'other',
+): Promise<ProfileRoute> {
   const r = ref(db, `users/${uid}`)
   const snap = await get(r)
 
@@ -96,11 +115,11 @@ export async function loadUserProfile(uid: string, user: User): Promise<ProfileR
       profileComplete: false,
       createdAt: serverTimestamp(),
     })
-    return { screen: 'creator', record: defaultCharacterFromAuth(user) }
+    return { screen: 'creator', record: defaultCharacterFromAuth(user, preferredGender) }
   }
 
   const val = snap.val()
-  const record = mergeRtdbProfile(val, user)
+  const record = mergeRtdbProfile(val, user, preferredGender)
   if (isOnboardedProfile(val)) {
     return { screen: 'main', record }
   }

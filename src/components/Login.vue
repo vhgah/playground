@@ -31,11 +31,21 @@
 
 <script setup lang="ts">
 import { auth, provider } from '../services/firebase'
-import { signInWithPopup, signInWithRedirect } from 'firebase/auth'
+import { getAdditionalUserInfo, signInWithPopup, signInWithRedirect } from 'firebase/auth'
+import { normalizeGoogleGender } from '../services/userProfile'
+
+const GENDER_CACHE_KEY = 'cw:pending-google-gender'
+
+function cacheGenderFromCredential(credential: unknown) {
+  const info = getAdditionalUserInfo(credential as import('firebase/auth').UserCredential)
+  const profile = info?.profile as Record<string, unknown> | null | undefined
+  sessionStorage.setItem(GENDER_CACHE_KEY, normalizeGoogleGender(profile?.gender))
+}
 
 async function login() {
   try {
-    await signInWithPopup(auth, provider)
+    const credential = await signInWithPopup(auth, provider)
+    cacheGenderFromCredential(credential)
   } catch (e: unknown) {
     const code = e && typeof e === 'object' && 'code' in e ? String((e as { code: string }).code) : ''
     if (code === 'auth/popup-blocked') {

@@ -36,7 +36,7 @@
           </div>
         </div>
 
-        <div class="panel-sec">
+        <!-- <div class="panel-sec">
           <div class="panel-sec-title">Tasks</div>
 
           <template v-if="isMine">
@@ -70,7 +70,7 @@
             <div class="state-label">{{ character.tasks.length }} active items</div>
             <div class="state-sub">Task editing is available only on your own character.</div>
           </div>
-        </div>
+        </div> -->
       </div>
     </template>
   </aside>
