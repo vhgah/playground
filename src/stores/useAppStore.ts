@@ -59,37 +59,42 @@ export interface SpotifyState {
 }
 
 const demoUsers: Record<string, CharacterRecord> = {
-  'demo-alice': {
-    name: 'Alice',
-    gender: 'female',
-    state: 'coding',
-    public: true,
-    scene: 'office',
-    skinTone: '#f1c27d',
-    hairColor: '#2f241d',
-    outfitColor: '#818cf8',
-    tasks: [
-      { id: 1, text: 'Review pull request', done: true },
-      { id: 2, text: 'Ship avatar scene', done: false },
-    ],
-    spotify: null,
-  },
-  'demo-lucas': {
-    name: 'Lucas',
-    gender: 'male',
-    state: 'music',
-    public: true,
-    scene: 'office',
-    skinTone: '#c68642',
-    hairColor: '#1f2937',
-    outfitColor: '#f59e0b',
-    tasks: [{ id: 1, text: 'Sync with product team', done: false }],
-    spotify: null,
-  },
+  // 'demo-alice': {
+  //   name: 'Alice',
+  //   gender: 'female',
+  //   state: 'coding',
+  //   public: true,
+  //   scene: 'office',
+  //   skinTone: '#f1c27d',
+  //   hairColor: '#2f241d',
+  //   outfitColor: '#818cf8',
+  //   tasks: [
+  //     { id: 1, text: 'Review pull request', done: true },
+  //     { id: 2, text: 'Ship avatar scene', done: false },
+  //   ],
+  //   spotify: null,
+  // },
+  // 'demo-lucas': {
+  //   name: 'Lucas',
+  //   gender: 'male',
+  //   state: 'music',
+  //   public: true,
+  //   scene: 'office',
+  //   skinTone: '#c68642',
+  //   hairColor: '#1f2937',
+  //   outfitColor: '#f59e0b',
+  //   tasks: [{ id: 1, text: 'Sync with product team', done: false }],
+  //   spotify: null,
+  // },
 }
 
 export const state = reactive<{
-  user: { uid: string; displayName?: string | null; photoURL?: string | null; email?: string | null } | null
+  user: {
+    uid: string
+    displayName?: string | null
+    photoURL?: string | null
+    email?: string | null
+  } | null
   users: Record<string, CharacterRecord>
   screen: Screen
   step: number
@@ -134,14 +139,14 @@ export const selectedUser = computed(() => {
 watch(
   () => state.selectedId,
   () => {
-  if (!state.selectedId || !state.users[state.selectedId]) {
-    state.selectedId = visibleUsers.value[0]?.id ?? null
-  }
+    if (!state.selectedId || !state.users[state.selectedId]) {
+      state.selectedId = visibleUsers.value[0]?.id ?? null
+    }
 
-  const selected = state.selectedId ? state.users[state.selectedId] : null
-  if (selected?.scene) {
-    state.currentScene = selected.scene
-  }
+    const selected = state.selectedId ? state.users[state.selectedId] : null
+    if (selected?.scene) {
+      state.currentScene = selected.scene
+    }
   },
   { immediate: true },
 )

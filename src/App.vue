@@ -119,45 +119,26 @@ onMounted(() => {
         const usersRef = ref(db, 'users')
         stopUsersRealtimeSync = onValue(usersRef, (snapshot) => {
           const value = snapshot.val() as Record<string, Record<string, unknown>> | null
-          if (!value) return
+          if (!value) {
+            for (const uid of Object.keys(state.users)) {
+              if (!uid.startsWith('demo-')) {
+                delete state.users[uid]
+              }
+            }
+            return
+          }
 
           const remoteUids = new Set<string>()
 
           Object.entries(value).forEach(([uid, raw]) => {
             remoteUids.add(uid)
-            const existing = state.users[uid]
+            const record = recordFromRtdb(raw)
 
-            if (existing) {
-              if (typeof raw.name === 'string') existing.name = raw.name
-              if (typeof raw.state === 'string') existing.state = raw.state as typeof existing.state
-              if (typeof raw.scene === 'string') existing.scene = raw.scene as typeof existing.scene
-              if (typeof raw.public === 'boolean') existing.public = raw.public
-              if (typeof raw.skinTone === 'string') existing.skinTone = raw.skinTone
-              if (typeof raw.hairColor === 'string') existing.hairColor = raw.hairColor
-              if (typeof raw.outfitColor === 'string') existing.outfitColor = raw.outfitColor
-              if (typeof raw.gender === 'string') existing.gender = raw.gender as typeof existing.gender
-              if (typeof raw.photoURL === 'string' || raw.photoURL === null) existing.photoURL = raw.photoURL as string | null
-              if (typeof raw.email === 'string' || raw.email === null) existing.email = raw.email as string | null
-
-              if (raw.spotify && typeof raw.spotify === 'object') {
-                const spotify = raw.spotify as Record<string, unknown>
-                if (typeof spotify.name === 'string' && Array.isArray(spotify.artists)) {
-                  existing.spotify = {
-                    name: spotify.name,
-                    artists: spotify.artists.filter((a): a is string => typeof a === 'string'),
-                    albumName: typeof spotify.albumName === 'string' ? spotify.albumName : 'Unknown album',
-                    albumImageUrl: typeof spotify.albumImageUrl === 'string' ? spotify.albumImageUrl : undefined,
-                    songUrl: typeof spotify.songUrl === 'string' ? spotify.songUrl : undefined,
-                    isPlaying: Boolean(spotify.isPlaying),
-                    updatedAt: typeof spotify.updatedAt === 'number' ? spotify.updatedAt : undefined,
-                  }
-                } else {
-                  existing.spotify = null
-                }
+            if (record) {
+              state.users[uid] = {
+                ...state.users[uid],
+                ...record,
               }
-            } else {
-              const record = recordFromRtdb(raw)
-              if (record) state.users[uid] = record
             }
           })
 
