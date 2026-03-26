@@ -138,6 +138,27 @@
           </div>
         </div>
 
+        <div v-if="isMine && character.state === 'music'" class="panel-sec">
+          <div class="panel-sec-title">🎵 Đang nghe</div>
+          <div v-if="character.nowPlaying" class="now-playing-current">
+            <span class="np-title-text">{{ character.nowPlaying.title }}</span>
+            <button class="btn-np-clear" type="button" @click="clearNowPlaying">✕</button>
+          </div>
+          <div class="np-input-row">
+            <input
+              v-model="songUrl"
+              class="np-input"
+              placeholder="Dán link YouTube / Spotify..."
+              type="url"
+              @keydown.enter="fetchSong"
+            />
+            <button class="btn-np-fetch" type="button" :disabled="fetchingson" @click="fetchSong">
+              {{ fetchingson ? '...' : '↵' }}
+            </button>
+          </div>
+          <div v-if="fetchError" class="np-error">{{ fetchError }}</div>
+        </div>
+
         <div v-if="isMine && state.spotify.connected" class="panel-sec">
           <div class="panel-sec-title">Now Listening</div>
           <div class="other-view" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
@@ -234,6 +255,42 @@ const bottomColors = [
 
 const character = selectedUser
 const draftName = ref('')
+const songUrl = ref('')
+const fetchingson = ref(false)
+const fetchError = ref('')
+
+async function fetchSong() {
+  const url = songUrl.value.trim()
+  if (!url) return
+  fetchingson.value = true
+  fetchError.value = ''
+  try {
+    let title = ''
+    if (url.includes('youtube.com') || url.includes('youtu.be')) {
+      const res = await fetch(`https://www.youtube.com/oembed?url=${encodeURIComponent(url)}&format=json`)
+      if (!res.ok) throw new Error('Không lấy được thông tin bài hát')
+      const data = await res.json()
+      title = data.title
+    } else if (url.includes('spotify.com')) {
+      const res = await fetch(`https://open.spotify.com/oembed?url=${encodeURIComponent(url)}`)
+      if (!res.ok) throw new Error('Không lấy được thông tin bài hát')
+      const data = await res.json()
+      title = data.title
+    } else {
+      throw new Error('Chỉ hỗ trợ YouTube và Spotify')
+    }
+    await syncPatch({ nowPlaying: { title, url } })
+    songUrl.value = ''
+  } catch (e: unknown) {
+    fetchError.value = e instanceof Error ? e.message : 'Lỗi không xác định'
+  } finally {
+    fetchingson.value = false
+  }
+}
+
+async function clearNowPlaying() {
+  await syncPatch({ nowPlaying: null })
+}
 
 const isMine = computed(() => {
   return !!character.value && character.value === state.users[state.user?.uid || '']

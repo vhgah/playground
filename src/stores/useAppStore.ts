@@ -37,6 +37,7 @@ export interface CharacterRecord {
   photoURL?: string | null
   email?: string | null
   tasks: TaskItem[]
+  nowPlaying?: { title: string; url?: string } | null
   spotify?: {
     name: string
     artists: string[]

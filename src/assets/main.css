@@ -672,12 +672,91 @@ body {
   border: 1px solid var(--border);
   border-radius: 20px;
   padding: 2px 7px;
-  font-size: 0.68rem;
+  font-size: 0.58rem;
+  color: var(--text-muted, #94a3b8);
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  text-align: center;
+  max-width: 85px;
+  overflow: hidden;
+}
+.state-badge-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
+  min-width: 0;
+}
+.state-badge.clickable {
+  cursor: pointer;
+}
+.state-badge.clickable:hover {
+  border-color: #f9a8d4;
+  color: #be185d;
+}
+
+
+.now-playing-current {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #fdf2f8, #ede9fe);
+  border: 1px solid #f9a8d4;
+  border-radius: 10px;
+  padding: 6px 10px;
+  margin-bottom: 8px;
+}
+.np-title-text {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #be185d;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.btn-np-clear {
+  background: none;
+  border: none;
+  color: #f9a8d4;
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 0;
+  flex-shrink: 0;
+}
+.np-input-row {
+  display: flex;
+  gap: 6px;
+}
+.np-input {
+  flex: 1;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 0.78rem;
+  color: var(--text);
+  outline: none;
+}
+.np-input:focus {
+  border-color: #f9a8d4;
+}
+.btn-np-fetch {
+  background: linear-gradient(135deg, #ec4899, #a855f7);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.85rem;
+  padding: 6px 12px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.btn-np-fetch:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.np-error {
+  font-size: 0.72rem;
+  color: #ef4444;
+  margin-top: 4px;
 }
 
 .empty-scene {

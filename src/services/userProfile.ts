@@ -113,6 +113,13 @@ export function mergeRtdbProfile(
     bottomColor: typeof v.bottomColor === 'string' ? v.bottomColor : base.bottomColor,
     photoURL: v.photoURL === null || typeof v.photoURL === 'string' ? v.photoURL : user.photoURL ?? base.photoURL,
     email: v.email === null || typeof v.email === 'string' ? v.email : user.email ?? base.email,
+    nowPlaying:
+      v.nowPlaying && typeof v.nowPlaying === 'object' && typeof (v.nowPlaying as { title?: unknown }).title === 'string'
+        ? {
+            title: (v.nowPlaying as { title: string }).title,
+            url: typeof (v.nowPlaying as { url?: unknown }).url === 'string' ? (v.nowPlaying as { url: string }).url : undefined,
+          }
+        : null,
     tasks,
     spotify:
       v.spotify &&
@@ -195,6 +202,13 @@ export function recordFromRtdb(raw: Record<string, unknown>): CharacterRecord | 
     bottomColor: typeof raw.bottomColor === 'string' ? raw.bottomColor : '#1e3a5f',
     photoURL: typeof raw.photoURL === 'string' ? raw.photoURL : null,
     email: typeof raw.email === 'string' ? raw.email : null,
+    nowPlaying:
+      raw.nowPlaying && typeof raw.nowPlaying === 'object' && typeof (raw.nowPlaying as { title?: unknown }).title === 'string'
+        ? {
+            title: (raw.nowPlaying as { title: string }).title,
+            url: typeof (raw.nowPlaying as { url?: unknown }).url === 'string' ? (raw.nowPlaying as { url: string }).url : undefined,
+          }
+        : null,
     tasks,
     spotify,
   }

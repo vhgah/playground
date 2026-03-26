@@ -4,7 +4,11 @@
     :class="{ sel: selected, 'is-me': isMe }"
     @click="$emit('select')"
   >
-    <span class="state-badge">{{ stateMeta.icon }} {{ stateMeta.label }}</span>
+    <span
+      class="state-badge"
+      :class="{ clickable: character.state === 'music' && !!character.nowPlaying?.url }"
+      @click.stop="character.state === 'music' && character.nowPlaying?.url && window.open(character.nowPlaying.url, '_blank')"
+    ><span class="state-badge-text">{{ stateMeta.icon }} {{ character.state === 'music' && character.nowPlaying ? character.nowPlaying.title : stateMeta.label }}</span></span>
     <CharacterAvatar class="char-scene-svg" :character="character" />
     <div class="char-scene-name">{{ character.name }}</div>
   </div>
@@ -15,6 +19,8 @@ import { computed } from 'vue'
 import CharacterAvatar from './CharacterAvatar.vue'
 import type { CharacterRecord } from '../stores/useAppStore'
 import { CHARACTER_STATE_META } from '../constants/states'
+
+const window = globalThis.window
 
 const props = defineProps<{
   character: CharacterRecord
