@@ -694,34 +694,7 @@ body {
 }
 
 
-.now-playing-current {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: linear-gradient(135deg, #fdf2f8, #ede9fe);
-  border: 1px solid #f9a8d4;
-  border-radius: 10px;
-  padding: 6px 10px;
-  margin-bottom: 8px;
-}
-.np-title-text {
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: #be185d;
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.btn-np-clear {
-  background: none;
-  border: none;
-  color: #f9a8d4;
-  cursor: pointer;
-  font-size: 0.75rem;
-  padding: 0;
-  flex-shrink: 0;
-}
+
 .np-input-row {
   display: flex;
   gap: 6px;

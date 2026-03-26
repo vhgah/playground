@@ -139,11 +139,7 @@
         </div>
 
         <div v-if="isMine && character.state === 'music'" class="panel-sec">
-          <div class="panel-sec-title">🎵 Đang nghe</div>
-          <div v-if="character.nowPlaying" class="now-playing-current">
-            <span class="np-title-text">{{ character.nowPlaying.title }}</span>
-            <button class="btn-np-clear" type="button" @click="clearNowPlaying">✕</button>
-          </div>
+          <div class="panel-sec-title">🎵 Now Playing</div>
           <div class="np-input-row">
             <input
               v-model="songUrl"
