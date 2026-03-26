@@ -12,6 +12,8 @@ export type CharacterState =
   | 'gaming'
   | 'workout'
   | 'meeting'
+  | 'designing'
+  | 'walking'
 
 export interface TaskItem {
   id: number

@@ -10,6 +10,8 @@ export const CHARACTER_STATES: Array<{ id: CharacterState; label: string; icon: 
   { id: 'gaming', label: 'Gaming', icon: '🎮' },
   { id: 'workout', label: 'Workout', icon: '💪' },
   { id: 'meeting', label: 'Meeting', icon: '📋' },
+  { id: 'designing', label: 'Designing', icon: '🎨' },
+  { id: 'walking', label: 'Walking', icon: '🚶' },
 ]
 
 export const CHARACTER_STATE_LABELS: Record<CharacterState, string> = Object.fromEntries(

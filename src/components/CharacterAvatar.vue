@@ -208,6 +208,34 @@ const avatarSvg = computed(() => {
                <rect x="33" y="148" width="20" height="2" rx="1" fill="#94a3b8"/>
                <line x1="66" y1="122" x2="70" y2="152" stroke="#374151" stroke-width="2" stroke-linecap="round"/>`
       break
+
+    case 'designing':
+      eyes = `<path d="M37,61 Q40,57 43,61" stroke="#333" fill="none" stroke-width="2"/>
+               <path d="M57,61 Q60,57 63,61" stroke="#333" fill="none" stroke-width="2"/>`
+      mouth = `<path d="M44,73 Q50,77 56,73" stroke="#c0392b" fill="none" stroke-width="1.5" stroke-linecap="round"/>`
+      arms = `<path d="M26,98 C20,112 22,128 28,140" stroke="${sk}" stroke-width="7" fill="none" stroke-linecap="round"/>
+               <path d="M74,98 C80,112 78,126 72,136" stroke="${sk}" stroke-width="7" fill="none" stroke-linecap="round"/>`
+      acc = `<rect x="18" y="130" width="52" height="40" rx="4" fill="#fff7ed" stroke="#e2e8f0" stroke-width="1"/>
+               <line x1="22" y1="148" x2="66" y2="148" stroke="#e2e8f0" stroke-width="1"/>
+               <circle cx="30" cy="140" r="5" fill="#f97316" opacity=".8"/>
+               <circle cx="42" cy="140" r="5" fill="#a78bfa" opacity=".8"/>
+               <circle cx="54" cy="140" r="5" fill="#34d399" opacity=".8"/>
+               <rect x="22" y="152" width="30" height="3" rx="1" fill="#94a3b8"/>
+               <rect x="22" y="158" width="22" height="3" rx="1" fill="#94a3b8"/>
+               <line x1="72" y1="118" x2="76" y2="148" stroke="${sk}" stroke-width="7" stroke-linecap="round"/>
+               <circle cx="74" cy="113" r="5" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5"/>
+               <ellipse cx="74" cy="113" rx="2" ry="3" fill="#1e293b"/>`
+      break
+
+    case 'walking':
+      mouth = `<path d="M43,73 Q50,78 57,73" stroke="#c0392b" fill="none" stroke-width="1.5" stroke-linecap="round"/>`
+      arms = `<path d="M26,98 C16,110 14,122 20,132" stroke="${sk}" stroke-width="7" fill="none" stroke-linecap="round"/>
+               <path d="M74,98 C84,108 86,120 80,130" stroke="${sk}" stroke-width="7" fill="none" stroke-linecap="round"/>`
+      acc = `<ellipse cx="37" cy="172" rx="10" ry="5" fill="#1a1a1a"/>
+               <ellipse cx="60" cy="168" rx="10" ry="5" fill="#1a1a1a"/>
+               <text x="72" y="50" font-size="11" fill="#86efac">♪</text>
+               <text x="79" y="38" font-size="9" fill="#6ee7b7" opacity=".8">♫</text>`
+      break
   }
 
   return `

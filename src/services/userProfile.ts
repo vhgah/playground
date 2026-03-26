@@ -4,7 +4,7 @@ import { db } from './firebase'
 import type { CharacterRecord, CharacterState, SceneId } from '../stores/useAppStore'
 
 const SCENES: SceneId[] = ['office', 'home', 'beach', 'cafe', 'park']
-const STATES: CharacterState[] = ['idle', 'coding', 'music', 'reading', 'sleeping', 'eating', 'gaming', 'workout', 'meeting']
+const STATES: CharacterState[] = ['idle', 'coding', 'music', 'reading', 'sleeping', 'eating', 'gaming', 'workout', 'meeting', 'designing', 'walking']
 const LEGACY_STATE_MAP: Record<string, CharacterState> = {
   focus: 'reading',
   break: 'eating',
