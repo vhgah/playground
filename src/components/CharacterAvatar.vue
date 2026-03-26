@@ -214,17 +214,14 @@ const avatarSvg = computed(() => {
                <path d="M57,61 Q60,57 63,61" stroke="#333" fill="none" stroke-width="2"/>`
       mouth = `<path d="M44,73 Q50,77 56,73" stroke="#c0392b" fill="none" stroke-width="1.5" stroke-linecap="round"/>`
       arms = `<path d="M26,98 C20,112 22,128 28,140" stroke="${sk}" stroke-width="7" fill="none" stroke-linecap="round"/>
-               <path d="M74,98 C80,112 78,126 72,136" stroke="${sk}" stroke-width="7" fill="none" stroke-linecap="round"/>`
-      acc = `<rect x="18" y="130" width="52" height="40" rx="4" fill="#fff7ed" stroke="#e2e8f0" stroke-width="1"/>
-               <line x1="22" y1="148" x2="66" y2="148" stroke="#e2e8f0" stroke-width="1"/>
-               <circle cx="30" cy="140" r="5" fill="#f97316" opacity=".8"/>
-               <circle cx="42" cy="140" r="5" fill="#a78bfa" opacity=".8"/>
-               <circle cx="54" cy="140" r="5" fill="#34d399" opacity=".8"/>
-               <rect x="22" y="152" width="30" height="3" rx="1" fill="#94a3b8"/>
-               <rect x="22" y="158" width="22" height="3" rx="1" fill="#94a3b8"/>
-               <line x1="72" y1="118" x2="76" y2="148" stroke="${sk}" stroke-width="7" stroke-linecap="round"/>
-               <circle cx="74" cy="113" r="5" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5"/>
-               <ellipse cx="74" cy="113" rx="2" ry="3" fill="#1e293b"/>`
+               <path d="M74,98 C78,112 76,126 68,134" stroke="${sk}" stroke-width="7" fill="none" stroke-linecap="round"/>`
+      acc = `<rect x="22" y="132" width="56" height="38" rx="4" fill="#fff7ed" stroke="#cbd5e1" stroke-width="1.5"/>
+               <circle cx="32" cy="142" r="5" fill="#f97316" opacity=".85"/>
+               <circle cx="44" cy="142" r="5" fill="#a78bfa" opacity=".85"/>
+               <circle cx="56" cy="142" r="5" fill="#34d399" opacity=".85"/>
+               <rect x="26" y="152" width="30" height="3" rx="1" fill="#94a3b8"/>
+               <rect x="26" y="158" width="22" height="3" rx="1" fill="#94a3b8"/>
+               <line x1="73" y1="138" x2="65" y2="162" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/>`
       break
 
     case 'walking':
